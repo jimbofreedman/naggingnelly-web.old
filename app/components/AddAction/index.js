@@ -14,7 +14,7 @@ function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(rest.actions.actions.post({},
-      { body: JSON.stringify(data) },
+      { body: JSON.stringify({ ...data, ...{ folder: 3, context: 3 } }) },
       (err) => {
         if (err === null) {
           reset();

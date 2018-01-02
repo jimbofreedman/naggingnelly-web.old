@@ -41,6 +41,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                   const action = actions.data[id];
                   return action.status === 0 &&
                   (!action.start_at || new Date(action.start_at) <= new Date()) &&
+                  (action.folder !== 1) &&
                   (!action.dependencies ||
                   !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
                     <div key={action.id}>

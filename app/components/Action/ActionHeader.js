@@ -18,8 +18,12 @@ import config from '../../config';
 function ActionHeader(props) {
   const { dispatch, action } = props;
 
-  const handle = (helperFunc) => (() => {
-    dispatch(helperFunc({ id: action.id }));
+  const handleHelper = (helperFunc) => (() => {
+    dispatch(helperFunc(action.id));
+  });
+
+  const handleUpdate = (actionDelta) => (() => {
+    dispatch(rest.actions.actions.put({ id: action.id }, { body: JSON.stringify({ ...action, ...actionDelta }) }));
   });
 
   const disabled = false;
@@ -28,7 +32,7 @@ function ActionHeader(props) {
     <MenuItem key={0} data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
       API Edit
     </MenuItem>,
-    <MenuItem key={1} onClick={handle(rest.actions.actions.delete)} >
+    <MenuItem key={1} onClick={handleUpdate({ folder: 1 })} >
       Move to Bin
     </MenuItem>,
   ];
@@ -41,9 +45,9 @@ function ActionHeader(props) {
             <DropdownButton id={`dropdownMenu${action.id}`} bsSize="small" noCaret title={<Glyphicon glyph="menu-hamburger" />} disabled={disabled} >
               {menuItems}
             </DropdownButton>
-            <ActionButton glyph="remove" disabled={disabled} bsStyle="danger" onClick={handle(rest.actions.actions.complete)} />
-            <ActionButton glyph="minus" disabled={disabled} bsStyle="warning" onClick={handle(rest.actions.actions.cancel)} />
-            <ActionButton glyph="ok" disabled={disabled} bsStyle="success" onClick={handle(rest.actions.actions.delete)} />
+            <ActionButton glyph="remove" disabled={disabled} bsStyle="danger" onClick={handleHelper(rest.actions.actions.fail)} />
+            <ActionButton glyph="minus" disabled={disabled} bsStyle="warning" onClick={handleHelper(rest.actions.actions.cancel)} />
+            <ActionButton glyph="ok" disabled={disabled} bsStyle="success" onClick={handleHelper(rest.actions.actions.complete)} />
           </ButtonGroup>
         </div>
         <div
