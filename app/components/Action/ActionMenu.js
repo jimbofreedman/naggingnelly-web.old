@@ -11,11 +11,10 @@ import config from '../../config';
 
 function ActionMenu({ action }) {
   return (
-    <div>
-      <MenuItem data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
-        API Edit
-      </MenuItem>
-    </div>);
+    <MenuItem data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
+      API Edit
+    </MenuItem>
+  );
 }
 
 ActionMenu.propTypes = {
