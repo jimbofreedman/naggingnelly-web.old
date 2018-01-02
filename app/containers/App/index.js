@@ -11,9 +11,10 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
+import ActionList from 'containers/ActionList/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import AddAction from 'components/AddAction';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 
@@ -29,6 +30,7 @@ const AppWrapper = styled.div`
 export default function App() {
   return (
     <AppWrapper>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
       <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
@@ -36,8 +38,9 @@ export default function App() {
         <meta name="description" content="A React.js Boilerplate application" />
       </Helmet>
       <Header />
+      <AddAction />
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={ActionList} />
         <Route path="/features" component={FeaturePage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
