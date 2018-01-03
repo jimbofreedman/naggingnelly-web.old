@@ -67,6 +67,20 @@ export default reduxApi({
     },
     options,
   },
+  contexts: {
+    url: '/gtd/contexts/(:id)/(:fn)/',
+    transformer: dictionaryTransformer,
+    crud: true,
+    reducerName: 'contexts',
+    options,
+  },
+  folders: {
+    url: '/gtd/folders/(:id)/(:fn)/',
+    transformer: dictionaryTransformer,
+    crud: true,
+    reducerName: 'folders',
+    options,
+  },
   graph: {
     url: '/gtd/actions/graph_json/',
     options,

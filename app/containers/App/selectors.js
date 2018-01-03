@@ -40,6 +40,16 @@ const makeSelectActions = () => createSelector(
   (state) => state.get('actions').toJS()
 );
 
+const makeSelectContexts = () => createSelector(
+  selectState,
+  (state) => state.get('contexts').toJS()
+);
+
+const makeSelectFolders = () => createSelector(
+  selectState,
+  (state) => state.get('folders').toJS()
+);
+
 export {
   selectGlobal,
   makeSelectCurrentUser,
@@ -48,4 +58,6 @@ export {
   makeSelectRepos,
   makeSelectLocation,
   makeSelectActions,
+  makeSelectContexts,
+  makeSelectFolders,
 };
