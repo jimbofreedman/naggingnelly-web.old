@@ -16,7 +16,7 @@ import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AddAction from 'components/AddAction';
 import Header from 'components/Header';
-import Footer from 'components/Footer';
+// import Footer from 'components/Footer';
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -32,10 +32,10 @@ export default function App() {
     <AppWrapper>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
       <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
+        titleTemplate="%s - NaggingNelly"
+        defaultTitle="NaggingNelly"
       >
-        <meta name="description" content="A React.js Boilerplate application" />
+        <meta name="description" content="An accountabilibuddy" />
       </Helmet>
       <Header />
       <AddAction />
@@ -44,7 +44,7 @@ export default function App() {
         <Route path="/features" component={FeaturePage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
-      <Footer />
+      {/* <Footer /> */}
     </AppWrapper>
   );
 }
