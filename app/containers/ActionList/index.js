@@ -18,7 +18,7 @@ import rest from '../../rest';
 import makeSelectActionList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { makeSelectActions, makeSelectFolders /* , makeSelectContexts */ } from '../App/selectors';
+import { makeSelectActions, makeSelectFolders, makeSelectContexts } from '../App/selectors';
 import Action from '../../components/Action';
 import SelectFolder from './SelectFolder';
 
@@ -29,7 +29,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
 
   render() {
     const handleSubmit = () => {};
-    const { actions, folders, dispatch, filters } = this.props;
+    const { actions, folders, contexts, dispatch, filters } = this.props;
 
     return (!actions.sync || !folders.sync) ?
       (<div>Loading</div>)
@@ -57,7 +57,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                   (!action.dependencies ||
                   !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
                     <div key={action.id}>
-                      <Action action={action} dispatch={dispatch} />
+                      <Action action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                     </div>
                   ) : null;
                 })
@@ -71,7 +71,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
 ActionList.propTypes = {
   dispatch: PropTypes.func.isRequired,
   actions: PropTypes.object,
-// contexts: PropTypes.object,
+  contexts: PropTypes.object,
   folders: PropTypes.object,
   loadAll: PropTypes.func,
   filters: PropTypes.object,
@@ -83,7 +83,7 @@ const formName = 'actionList';
 const mapStateToProps = createStructuredSelector({
   ActionList: makeSelectActionList(),
   actions: makeSelectActions(),
-// contexts: makeSelectContexts(),
+  contexts: makeSelectContexts(),
   folders: makeSelectFolders(),
   filters: (state) => {
     const selector = formValueSelector(formName);
@@ -98,7 +98,7 @@ function mapDispatchToProps(dispatch) {
     dispatch,
     loadAll: () => {
       dispatch(rest.actions.actions.sync());
-      // dispatch(rest.actions.contexts.sync());
+      dispatch(rest.actions.contexts.sync());
       dispatch(rest.actions.folders.sync());
     },
   };

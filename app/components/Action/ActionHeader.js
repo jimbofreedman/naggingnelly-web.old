@@ -16,7 +16,7 @@ import config from '../../config';
 
 
 function ActionHeader(props) {
-  const { dispatch, action } = props;
+  const { dispatch, action, folders, contexts } = props;
 
   const handleHelper = (helperFunc) => (() => {
     dispatch(helperFunc(action.id));
@@ -32,9 +32,18 @@ function ActionHeader(props) {
     <MenuItem key={0} data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
       API Edit
     </MenuItem>,
-    <MenuItem key={1} onClick={handleUpdate({ folder: 1 })} >
-      Move to Bin
-    </MenuItem>,
+    <MenuItem key="dfolder" divider />,
+    <MenuItem key="hfolder" header>Move to folder</MenuItem>,
+    ...Object.keys(folders.data).map((id) => {
+      const folder = folders.data[id];
+      return (<MenuItem key={`folder${folder.id}`} onClick={handleUpdate({ folder: folder.id })}>{folder.name}</MenuItem>);
+    }),
+    <MenuItem key="dcontext" divider />,
+    <MenuItem key="hcontext" header>Change context</MenuItem>,
+    ...Object.keys(contexts.data).map((id) => {
+      const context = contexts.data[id];
+      return (<MenuItem key={`context${context.id}`} onClick={handleUpdate({ context: context.id })}>{context.name}</MenuItem>);
+    }),
   ];
 
   return (
@@ -70,6 +79,8 @@ function ActionHeader(props) {
 
 ActionHeader.propTypes = {
   action: React.PropTypes.object,
+  folders: React.PropTypes.object,
+  contexts: React.PropTypes.object,
   dispatch: React.PropTypes.func,
 };
 
