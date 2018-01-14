@@ -70,6 +70,7 @@ function ActionHeader(props) {
             whiteSpace: 'nowrap',
           }}
         >
+          <Glyphicon glyph={contexts.data[action.context].glyph} />
           {action.short_description}
           {dueLabel}
         </div>
