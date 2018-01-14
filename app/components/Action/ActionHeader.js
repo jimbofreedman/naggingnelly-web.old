@@ -54,6 +54,7 @@ function ActionHeader(props) {
     <div>
       <ContextMenuTrigger id={`contextMenu${action.id}`}>
         <div className="pull-right">
+          {dueLabel}
           <ButtonGroup style={{ marginTop: '-5px' }}>
             <DropdownButton id={`dropdownMenu${action.id}`} bsSize="small" noCaret title={<Glyphicon glyph="menu-hamburger" />} disabled={disabled} >
               {menuItems}
@@ -72,7 +73,6 @@ function ActionHeader(props) {
         >
           <Glyphicon glyph={contexts.data[action.context].glyph} />
           {action.short_description}
-          {dueLabel}
         </div>
       </ContextMenuTrigger>
 

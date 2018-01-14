@@ -39,7 +39,7 @@ export class DueLabel extends React.PureComponent { // eslint-disable-line react
       dueColor = 'info';
     }
 
-    return <Label className="pull-right" bsStyle={dueColor}>{dueDate.fromNow()}</Label>;
+    return <Label bsStyle={dueColor}>{dueDate.fromNow()}</Label>;
   }
 }
 
