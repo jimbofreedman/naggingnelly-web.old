@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Form, FormGroup } from 'react-bootstrap';
+import { PanelGroup, Form, FormGroup } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
 import injectSaga from 'utils/injectSaga';
@@ -43,7 +43,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
               </FormGroup>
             </Form>
           </div>
-          <div>
+          <PanelGroup id="actionList" accordion>
             {
               Object.keys(actions.data)
                 .sort((a, b) =>
@@ -56,13 +56,11 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                   (action.folder === filters.folder) &&
                   (!action.dependencies ||
                   !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
-                    <div key={action.id}>
-                      <Action action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
-                    </div>
+                    <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                   ) : null;
                 })
             }
-          </div>
+          </PanelGroup>
         </div>
       );
   }

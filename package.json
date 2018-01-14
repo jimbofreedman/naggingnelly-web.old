@@ -229,7 +229,7 @@
     "moment": "^2.20.1",
     "prop-types": "15.5.10",
     "react": "15.6.1",
-    "react-bootstrap": "^0.31.5",
+    "react-bootstrap": "^0.32.0",
     "react-contextmenu": "^2.9.2",
     "react-dom": "15.6.1",
     "react-helmet": "5.1.3",

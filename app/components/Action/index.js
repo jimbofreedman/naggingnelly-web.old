@@ -6,7 +6,7 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-import { Panel } from 'react-bootstrap';
+import { Panel, Grid, Row, Col } from 'react-bootstrap';
 
 import ActionHeader from './ActionHeader';
 
@@ -15,9 +15,32 @@ function Action(props) {
 
   const disabled = false;
   const color = undefined;
-  const open = false;
 
-  return (<Panel key={action.id} collapsible expanded={open} bsStyle={color} disabled={disabled} header={<ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />} />);
+  return (
+    <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
+      <Panel.Heading>
+        <Panel.Title toggle>
+          <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />
+        </Panel.Title>
+      </Panel.Heading>
+      <Panel.Body collapsible>
+        <Grid>
+          <Row>
+            <Col sm={2} md={2}>Priority:</Col>
+            <Col>{action.priority}</Col>
+          </Row>
+          {action.start_at ? <Row>
+            <Col sm={2} md={2}>Start at:</Col>
+            <Col>{action.start_at}</Col>
+          </Row> : null}
+          {action.due_at ? <Row>
+            <Col sm={2} md={2}>Due at:</Col>
+            <Col>{action.due_at}</Col>
+          </Row> : null}
+        </Grid>
+      </Panel.Body>
+    </Panel>
+  );
 }
 
 Action.propTypes = {
