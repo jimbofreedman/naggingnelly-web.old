@@ -6,11 +6,12 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-import { ButtonGroup, Label, DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
+import { ButtonGroup, DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
 import { ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
 
 import rest from '../../rest';
 import ActionButton from './ActionButton';
+import DueLabel from './DueLabel';
 // import ActionMenu from './ActionMenu';
 import config from '../../config';
 
@@ -46,6 +47,9 @@ function ActionHeader(props) {
     }),
   ];
 
+
+  const dueLabel = action.due_at ? <DueLabel dueDate={action.due_at} /> : null;
+
   return (
     <div>
       <ContextMenuTrigger id={`contextMenu${action.id}`}>
@@ -67,7 +71,7 @@ function ActionHeader(props) {
           }}
         >
           {action.short_description}
-          <Label>{action.due_at}</Label>
+          {dueLabel}
         </div>
       </ContextMenuTrigger>
 
