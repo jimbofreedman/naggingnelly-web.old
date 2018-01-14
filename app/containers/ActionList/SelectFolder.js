@@ -8,7 +8,7 @@ import React from 'react';
 // import styled from 'styled-components';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
-function ActionButton({ input, data, onChange }) {
+function SelectFolder({ input, data, onChange }) {
   return (
     <DropdownButton
       id="selectFolder"
@@ -23,10 +23,10 @@ function ActionButton({ input, data, onChange }) {
   );
 }
 
-ActionButton.propTypes = {
+SelectFolder.propTypes = {
   input: React.PropTypes.object,
   data: React.PropTypes.object,
   onChange: React.PropTypes.func,
 };
 
-export default ActionButton;
+export default SelectFolder;

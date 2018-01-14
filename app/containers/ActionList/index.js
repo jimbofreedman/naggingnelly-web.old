@@ -21,6 +21,7 @@ import saga from './saga';
 import { makeSelectActions, makeSelectFolders, makeSelectContexts } from '../App/selectors';
 import Action from '../../components/Action';
 import SelectFolder from './SelectFolder';
+import ToggleButton from './ToggleButton';
 
 export class ActionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
@@ -40,6 +41,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
             <Form onSubmit={handleSubmit}>
               <FormGroup>
                 <Field name="folder" defaultValue={3} component={SelectFolder} data={folders.data} />
+                <Field name="showFuture" component={ToggleButton} label="Show Future" />
               </FormGroup>
             </Form>
           </div>
@@ -52,11 +54,11 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                 .map((id) => {
                   const action = actions.data[id];
                   return action.status === 0 &&
-                  (!action.start_at || new Date(action.start_at) <= new Date()) &&
-                  (action.folder === filters.folder) &&
-                  (!action.dependencies ||
-                  !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
-                    <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
+                    (filters.showFuture || (!action.start_at || new Date(action.start_at) <= new Date())) &&
+                    (action.folder === filters.folder) &&
+                    (!action.dependencies ||
+                    !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
+                      <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                   ) : null;
                 })
             }
@@ -87,6 +89,7 @@ const mapStateToProps = createStructuredSelector({
     const selector = formValueSelector(formName);
     return {
       folder: selector(state, 'folder'),
+      showFuture: selector(state, 'showFuture'),
     };
   },
 });
