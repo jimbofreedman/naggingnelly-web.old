@@ -18,11 +18,7 @@ function Action(props) {
 
   return (
     <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
-      <Panel.Heading>
-        <Panel.Title toggle>
-          <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />
-        </Panel.Title>
-      </Panel.Heading>
+      <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />
       <Panel.Body collapsible>
         <Grid>
           <Row>

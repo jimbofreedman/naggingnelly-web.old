@@ -6,7 +6,7 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-import { ButtonGroup, DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
+import { ButtonGroup, DropdownButton, Glyphicon, MenuItem, Panel } from 'react-bootstrap';
 import { ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
 
 import rest from '../../rest';
@@ -51,7 +51,7 @@ function ActionHeader(props) {
   const dueLabel = action.due_at ? <DueLabel dueDate={action.due_at} /> : null;
 
   return (
-    <div>
+    <Panel.Heading>
       <ContextMenuTrigger id={`contextMenu${action.id}`}>
         <div className="pull-right">
           {dueLabel}
@@ -72,14 +72,14 @@ function ActionHeader(props) {
           }}
         >
           <Glyphicon glyph={contexts.data[action.context].glyph} />
-          {action.short_description}
+          <Panel.Toggle componentClass="span">{action.short_description}</Panel.Toggle>
         </div>
       </ContextMenuTrigger>
 
       <ContextMenu id={`contextMenu${action.id}`}>
         {menuItems}
       </ContextMenu>
-    </div>);
+    </Panel.Heading>);
 }
 
 ActionHeader.propTypes = {
