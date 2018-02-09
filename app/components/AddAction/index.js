@@ -27,7 +27,7 @@ function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <InputGroup>
-            <Field name="short_description" component="input" className="form-control" type="text" placeholder="Add to collectbox" />
+            <Field name="short_description" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
             <SplitButton
               componentClass={InputGroup.Button}
               title={<Glyphicon glyph="plus" />}
