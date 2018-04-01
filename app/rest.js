@@ -64,6 +64,29 @@ export default reduxApi({
       fail(id) {
         return [{ id, fn: 'fail' }, { method: 'post' }];
       },
+      syncSince(updatedSince) {
+        const { dispatch } = this;
+        dispatch(this.actions.actions.sync({ updated_since: updatedSince }, {}, (err, data) => {
+          let updatedAt = '';
+          Object.keys(data)
+            .forEach((key) => {
+              const item = data[key];
+              if (item.updated_at > updatedAt) {
+                updatedAt = item.updated_at;
+              }
+            });
+          dispatch({
+            type: '@@redux-api@actions_updated_at',
+            value: updatedAt,
+          });
+        }));
+      },
+    },
+    reducer(state, action) {
+      if (action.type === '@@redux-api@actions_updated_at') {
+        return state.setIn(['updatedAt'], action.value);
+      }
+      return state;
     },
     options,
   },
@@ -72,6 +95,31 @@ export default reduxApi({
     transformer: dictionaryTransformer,
     crud: true,
     reducerName: 'contexts',
+    helpers: {
+      syncSince(updatedSince) {
+        const { dispatch } = this;
+        dispatch(this.actions.contexts.sync({ updated_since: updatedSince }, {}, (err, data) => {
+          let updatedAt = '';
+          Object.keys(data)
+            .forEach((key) => {
+              const item = data[key];
+              if (item.updated_at > updatedAt) {
+                updatedAt = item.updated_at;
+              }
+            });
+          dispatch({
+            type: '@@redux-api@contexts_updated_at',
+            value: updatedAt,
+          });
+        }));
+      },
+    },
+    reducer(state, action) {
+      if (action.type === '@@redux-api@contexts_updated_at') {
+        return state.setIn(['updatedAt'], action.value);
+      }
+      return state;
+    },
     options,
   },
   folders: {
@@ -79,6 +127,31 @@ export default reduxApi({
     transformer: dictionaryTransformer,
     crud: true,
     reducerName: 'folders',
+    helpers: {
+      syncSince(updatedSince) {
+        const { dispatch } = this;
+        dispatch(this.actions.folders.sync({ updated_since: updatedSince }, {}, (err, data) => {
+          let updatedAt = '';
+          Object.keys(data)
+            .forEach((key) => {
+              const item = data[key];
+              if (item.updated_at > updatedAt) {
+                updatedAt = item.updated_at;
+              }
+            });
+          dispatch({
+            type: '@@redux-api@folders_updated_at',
+            value: updatedAt,
+          });
+        }));
+      },
+    },
+    reducer(state, action) {
+      if (action.type === '@@redux-api@folders_updated_at') {
+        return state.setIn(['updatedAt'], action.value);
+      }
+      return state;
+    },
     options,
   },
   graph: {

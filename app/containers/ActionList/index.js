@@ -24,8 +24,24 @@ import SelectFolder from './SelectFolder';
 import ToggleButton from './ToggleButton';
 
 export class ActionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+    this.refresh = this.refresh.bind(this);
+  }
+
   componentDidMount() {
-    this.props.loadAll();
+    this.interval = setInterval(this.refresh, 10000);
+    this.refresh();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  refresh() {
+    this.props.loadContexts(this.props.contexts.updatedAt);
+    this.props.loadFolders(this.props.folders.updatedAt);
+    this.props.loadActions(this.props.actions.updatedAt);
   }
 
   render() {
@@ -73,7 +89,9 @@ ActionList.propTypes = {
   actions: PropTypes.object,
   contexts: PropTypes.object,
   folders: PropTypes.object,
-  loadAll: PropTypes.func,
+  loadActions: PropTypes.func,
+  loadContexts: PropTypes.func,
+  loadFolders: PropTypes.func,
   filters: PropTypes.object,
 };
 
@@ -97,10 +115,14 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    loadAll: () => {
-      dispatch(rest.actions.actions.sync());
-      dispatch(rest.actions.contexts.sync());
-      dispatch(rest.actions.folders.sync());
+    loadActions: (updatedSince) => {
+      dispatch(rest.actions.actions.syncSince(updatedSince));
+    },
+    loadContexts: (updatedSince) => {
+      dispatch(rest.actions.contexts.syncSince(updatedSince));
+    },
+    loadFolders: (updatedSince) => {
+      dispatch(rest.actions.folders.syncSince(updatedSince));
     },
   };
 }
