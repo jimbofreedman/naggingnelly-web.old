@@ -11,14 +11,14 @@ import { Panel, Grid, Row, Col } from 'react-bootstrap';
 import ActionHeader from './ActionHeader';
 
 function Action(props) {
-  const { dispatch, action, folders, contexts } = props;
+  const { dispatch, action, folders, contexts, loading } = props;
 
   const disabled = false;
   const color = undefined;
 
   return (
     <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
-      <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />
+      <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} loading={loading} />
       <Panel.Body collapsible>
         <Grid>
           <Row>
@@ -30,7 +30,7 @@ function Action(props) {
             <Col>{action.start_at}</Col>
           </Row> : null}
           {action.due_at ? <Row>
-            <Col sm={2} md={2}>Due at:</Col>
+            <Col sm={2} md={2}>Due at:</Col>nopm
             <Col>{action.due_at}</Col>
           </Row> : null}
         </Grid>
@@ -41,6 +41,7 @@ function Action(props) {
 
 Action.propTypes = {
   action: React.PropTypes.object,
+  loading: React.PropTypes.bool,
   folders: React.PropTypes.object,
   contexts: React.PropTypes.object,
   dispatch: React.PropTypes.func,

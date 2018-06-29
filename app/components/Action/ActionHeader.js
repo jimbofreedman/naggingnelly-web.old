@@ -17,17 +17,17 @@ import config from '../../config';
 
 
 function ActionHeader(props) {
-  const { dispatch, action, folders, contexts } = props;
+  const { dispatch, action, folders, contexts, loading } = props;
 
   const handleHelper = (helperFunc) => (() => {
     dispatch(helperFunc(action.id));
   });
 
   const handleUpdate = (actionDelta) => (() => {
-    dispatch(rest.actions.actions.put({ id: action.id }, { body: JSON.stringify({ ...action, ...actionDelta }) }));
+    dispatch(rest.actions.actions.put(
+      { id: action.id },
+      { body: JSON.stringify({ ...action, ...actionDelta }) }));
   });
-
-  const disabled = false;
 
   const menuItems = [
     <MenuItem key={0} data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
@@ -56,12 +56,12 @@ function ActionHeader(props) {
         <div className="pull-right">
           {dueLabel}
           <ButtonGroup style={{ marginTop: '-5px' }}>
-            <DropdownButton id={`dropdownMenu${action.id}`} bsSize="small" noCaret title={<Glyphicon glyph="menu-hamburger" />} disabled={disabled} >
+            <DropdownButton id={`dropdownMenu${action.id}`} bsSize="small" noCaret title={<Glyphicon glyph="menu-hamburger" />} disabled={loading} >
               {menuItems}
             </DropdownButton>
-            <ActionButton glyph="remove" disabled={disabled} bsStyle="danger" onClick={handleHelper(rest.actions.actions.fail)} />
-            <ActionButton glyph="minus" disabled={disabled} bsStyle="warning" onClick={handleHelper(rest.actions.actions.cancel)} />
-            <ActionButton glyph="ok" disabled={disabled} bsStyle="success" onClick={handleHelper(rest.actions.actions.complete)} />
+            <ActionButton glyph="remove" disabled={loading} bsStyle="danger" onClick={handleHelper(rest.actions.actions.fail)} />
+            <ActionButton glyph="minus" disabled={loading} bsStyle="warning" onClick={handleHelper(rest.actions.actions.cancel)} />
+            <ActionButton glyph="ok" disabled={loading} bsStyle="success" onClick={handleHelper(rest.actions.actions.complete)} />
           </ButtonGroup>
         </div>
         <div
@@ -84,6 +84,7 @@ function ActionHeader(props) {
 
 ActionHeader.propTypes = {
   action: React.PropTypes.object,
+  loading: React.PropTypes.bool,
   folders: React.PropTypes.object,
   contexts: React.PropTypes.object,
   dispatch: React.PropTypes.func,
