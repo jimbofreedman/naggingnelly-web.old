@@ -29,9 +29,9 @@ function Action(props) {
             <Col sm={2} md={2}>Start at:</Col>
             <Col>{action.start_at}</Col>
           </Row> : null}
-          {action.due_at ? <Row>
+          {action.dueAt ? <Row>
             <Col sm={2} md={2}>Due at:</Col>nopm
-            <Col>{action.due_at}</Col>
+            <Col>{action.dueAt}</Col>
           </Row> : null}
         </Grid>
       </Panel.Body>

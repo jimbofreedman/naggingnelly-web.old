@@ -48,7 +48,7 @@ function ActionHeader(props) {
   ];
 
 
-  const dueLabel = action.due_at ? <DueLabel dueDate={action.due_at} /> : null;
+  const dueLabel = action.dueAt ? <DueLabel dueDate={action.dueAt} /> : null;
 
   return (
     <Panel.Heading>
@@ -72,7 +72,7 @@ function ActionHeader(props) {
           }}
         >
           <Glyphicon glyph={contexts.data[action.context].glyph} />
-          <Panel.Toggle componentClass="span">{action.short_description}</Panel.Toggle>
+          <Panel.Toggle componentClass="span">{action.shortDescription}</Panel.Toggle>
         </div>
       </ContextMenuTrigger>
 

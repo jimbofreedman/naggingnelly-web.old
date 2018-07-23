@@ -27,7 +27,7 @@ function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <InputGroup>
-            <Field name="short_description" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
+            <Field name="shortDescription" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
             <SplitButton
               componentClass={InputGroup.Button}
               title={<Glyphicon glyph="plus" />}
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
   const selector = formValueSelector(formName);
   return {
     data: {
-      short_description: selector(state, 'short_description'),
+      shortDescription: selector(state, 'shortDescription'),
     },
   };
 };
