@@ -17,7 +17,10 @@ import config from '../../config';
 
 
 function ActionHeader(props) {
-  const { dispatch, action, folders, contexts, loading } = props;
+  // console.log("RENDERING ACTIONHEADER");
+
+  const { dispatch, action, folders, contexts } = props;
+  const loading = false;
 
   const handleHelper = (helperFunc) => (() => {
     dispatch(helperFunc(action.id));
@@ -84,7 +87,6 @@ function ActionHeader(props) {
 
 ActionHeader.propTypes = {
   action: React.PropTypes.object,
-  loading: React.PropTypes.bool,
   folders: React.PropTypes.object,
   contexts: React.PropTypes.object,
   dispatch: React.PropTypes.func,

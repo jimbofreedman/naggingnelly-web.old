@@ -26,6 +26,9 @@ export function fetchWithCsrfToken(url, request) {
 
 export function dictionaryTransformer(data, prevData /* , action */) {
   const newData = {};
+  if (data === undefined || data === []) {
+    return prevData;
+  }
 
   if (prevData !== undefined) {
     Object.keys(prevData).forEach((id) => {
@@ -48,7 +51,59 @@ export function dictionaryTransformer(data, prevData /* , action */) {
   return newData;
 }
 
+export function syncSinceCallback(dispatch, type) {
+  return (err, data) => {
+    let updatedAt = '';
+    Object.keys(data)
+      .forEach((key) => {
+        const item = data[key];
+        if (item.updatedAt > updatedAt) {
+          updatedAt = item.updatedAt;
+        }
+      });
+    dispatch({
+      type: `@@redux-api@${type}_updated_at`,
+      value: updatedAt,
+    });
+  };
+}
+
 export default reduxApi({
+  login: {
+    reducerName: 'auth',
+    url: '/rest-auth/login/',
+    options: {
+      ...options,
+      method: 'post',
+    },
+  },
+  logout: {
+    url: '/rest-auth/logout/',
+    options: {
+      ...options,
+      method: 'post',
+    },
+  },
+  poll: {
+    url: '/gtd/poll/',
+    postfetch: [
+      ({ data, actions, dispatch, getState }) => {
+        if (!getState().actions.updatedAt || data.actions > getState().actions.updatedAt) {
+          dispatch(actions.actions.syncSince(undefined, syncSinceCallback(dispatch, 'actions')));
+        }
+        if (!getState().contexts.updatedAt || data.contexts > getState().contexts.updatedAt) {
+          dispatch(actions.contexts.syncSince(undefined, syncSinceCallback(dispatch, 'contexts')));
+        }
+        if (!getState().folders.updatedAt || data.folders > getState().folders.updatedAt) {
+          dispatch(actions.folders.syncSince(undefined, syncSinceCallback(dispatch, 'folders')));
+        }
+      },
+    ],
+    options: {
+      ...options,
+      method: 'get',
+    },
+  },
   actions: {
     url: '/gtd/actions/(:id)/(:fn)/',
     transformer: dictionaryTransformer,
@@ -65,26 +120,12 @@ export default reduxApi({
         return [{ id, fn: 'fail' }, { method: 'post' }];
       },
       syncSince(updatedSince) {
-        const { dispatch } = this;
-        dispatch(this.actions.actions.sync({ updated_since: updatedSince }, {}, (err, data) => {
-          let updatedAt = '';
-          Object.keys(data)
-            .forEach((key) => {
-              const item = data[key];
-              if (item.updated_at > updatedAt) {
-                updatedAt = item.updated_at;
-              }
-            });
-          dispatch({
-            type: '@@redux-api@actions_updated_at',
-            value: updatedAt,
-          });
-        }));
+        return [{ updatedSince }];
       },
     },
     reducer(state, action) {
       if (action.type === '@@redux-api@actions_updated_at') {
-        return state.setIn(['updatedAt'], action.value);
+        return !state.has('updatedAt') || action.value > state.get('updatedAt') ? state.set('updatedAt', action.value) : state;
       }
       return state;
     },
@@ -97,26 +138,12 @@ export default reduxApi({
     reducerName: 'contexts',
     helpers: {
       syncSince(updatedSince) {
-        const { dispatch } = this;
-        dispatch(this.actions.contexts.sync({ updated_since: updatedSince }, {}, (err, data) => {
-          let updatedAt = '';
-          Object.keys(data)
-            .forEach((key) => {
-              const item = data[key];
-              if (item.updated_at > updatedAt) {
-                updatedAt = item.updated_at;
-              }
-            });
-          dispatch({
-            type: '@@redux-api@contexts_updated_at',
-            value: updatedAt,
-          });
-        }));
+        return [{ updatedSince }];
       },
     },
     reducer(state, action) {
       if (action.type === '@@redux-api@contexts_updated_at') {
-        return state.setIn(['updatedAt'], action.value);
+        return !state.has('updatedAt') || action.value > state.get('updatedAt') ? state.set('updatedAt', action.value) : state;
       }
       return state;
     },
@@ -129,33 +156,15 @@ export default reduxApi({
     reducerName: 'folders',
     helpers: {
       syncSince(updatedSince) {
-        const { dispatch } = this;
-        dispatch(this.actions.folders.sync({ updated_since: updatedSince }, {}, (err, data) => {
-          let updatedAt = '';
-          Object.keys(data)
-            .forEach((key) => {
-              const item = data[key];
-              if (item.updated_at > updatedAt) {
-                updatedAt = item.updated_at;
-              }
-            });
-          dispatch({
-            type: '@@redux-api@folders_updated_at',
-            value: updatedAt,
-          });
-        }));
+        return [{ updatedSince }];
       },
     },
     reducer(state, action) {
       if (action.type === '@@redux-api@folders_updated_at') {
-        return state.setIn(['updatedAt'], action.value);
+        return !state.has('updatedAt') || action.value > state.get('updatedAt') ? state.set('updatedAt', action.value) : state;
       }
       return state;
     },
-    options,
-  },
-  graph: {
-    url: '/gtd/actions/graph_json/',
     options,
   },
 }).use('fetch', adapterFetch(fetchWithCsrfToken))

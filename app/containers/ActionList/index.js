@@ -39,9 +39,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
   }
 
   refresh() {
-    this.props.loadContexts(this.props.contexts.updatedAt);
-    this.props.loadFolders(this.props.folders.updatedAt);
-    this.props.loadActions(this.props.actions.updatedAt);
+    this.props.poll();
   }
 
   render() {
@@ -74,7 +72,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                     (action.folder === filters.folder) &&
                     (!action.dependencies ||
                     !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
-                      <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} loading={actions.loading} />
+                      <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                   ) : null;
                 })
             }
@@ -89,9 +87,7 @@ ActionList.propTypes = {
   actions: PropTypes.object,
   contexts: PropTypes.object,
   folders: PropTypes.object,
-  loadActions: PropTypes.func,
-  loadContexts: PropTypes.func,
-  loadFolders: PropTypes.func,
+  poll: PropTypes.func,
   filters: PropTypes.object,
 };
 
@@ -115,14 +111,8 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    loadActions: (updatedSince) => {
-      dispatch(rest.actions.actions.syncSince(updatedSince));
-    },
-    loadContexts: (updatedSince) => {
-      dispatch(rest.actions.contexts.syncSince(updatedSince));
-    },
-    loadFolders: (updatedSince) => {
-      dispatch(rest.actions.folders.syncSince(updatedSince));
+    poll: () => {
+      dispatch(rest.actions.poll());
     },
   };
 }
