@@ -25,9 +25,9 @@ function Action(props) {
             <Col sm={2} md={2}>Priority:</Col>
             <Col>{action.priority}</Col>
           </Row>
-          {action.start_at ? <Row>
+          {action.startAt ? <Row>
             <Col sm={2} md={2}>Start at:</Col>
-            <Col>{action.start_at}</Col>
+            <Col>{action.startAt}</Col>
           </Row> : null}
           {action.dueAt ? <Row>
             <Col sm={2} md={2}>Due at:</Col>nopm

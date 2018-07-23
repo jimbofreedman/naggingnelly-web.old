@@ -68,7 +68,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                 .map((id) => {
                   const action = actions.data[id];
                   return action.status === 0 &&
-                    (filters.showFuture || (!action.start_at || new Date(action.start_at) <= new Date())) &&
+                    (filters.showFuture || (!action.startAt || new Date(action.startAt) <= new Date())) &&
                     (action.folder === filters.folder) &&
                     (!action.dependencies ||
                     !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
