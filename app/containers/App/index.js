@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
-import ActionList from 'containers/ActionList/Loadable';
+import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ActionGraph from 'containers/ActionGraph/Loadable';
@@ -41,7 +41,7 @@ export default function App() {
       <Header />
       <AddAction />
       <Switch>
-        <Route exact path="/" component={ActionList} />
+        <Route exact path="/" component={HomePage} />
         <Route path="/features" component={FeaturePage} />
         <Route path="/actionGraph" component={ActionGraph} />
         <Route path="" component={NotFoundPage} />
