@@ -26,16 +26,18 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       (<div>Loading</div>)
       :
       (
-        <ForceGraph simulationOptions={{ height: 1000, width: 1000 }} showLabels>
+        <ForceGraph
+          simulationOptions={{ height: 1000, width: 1000 }}
+          labelAttr="shortDescription"
+          showLabels
+        >
           {
             Object.keys(actions.data)
+              .filter((id) => actions.data[id].status === 0)
               .map((id) => {
                 const action = actions.data[id];
-
-                const links = action.dependencies.map((dependencyId) =>
-                  <ForceGraphLink link={{ source: action.id, target: dependencyId }} />);
-
-                return links.concat([<ForceGraphNode key={action.id} node={{ id: action.id }} fill="red" />]);
+                const links = action.dependencies.filter((dependencyId) => actions.data[dependencyId].status === 0).map((dependencyId) => <ForceGraphLink link={{ source: action.id, target: dependencyId }} />);
+                return links.concat([<ForceGraphNode key={action.id} node={action} fill="red" />]);
               })
           }
         </ForceGraph>
