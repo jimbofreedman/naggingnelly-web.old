@@ -25,7 +25,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <Col sm={12} md={12} lg={4}>
             <ActionList />
           </Col>
-          <Col sm={0} md={0} lg={8}>
+          <Col xsHidden mdHidden lg={8}>
             <ActionGraph />
           </Col>
         </Row>
