@@ -1,19 +1,18 @@
 /**
-*
-* Action
-*
-*/
+ *
+ * Action
+ *
+ */
 
 import React from 'react';
 import { connect } from 'react-redux';
 // import styled from 'styled-components';
 import { Panel, Grid, Row, Col, Form, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
-import EditAction from './EditAction';
 
 import ActionHeader from './ActionHeader';
 
-function Action(props) {
+function EditAction(props) {
   const { dispatch, action, folders, contexts } = props;
 
   const disabled = false;
@@ -25,30 +24,26 @@ function Action(props) {
   const submitting = true;
 
   return (
-    <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
-      <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />
-      <Panel.Body collapsible>
-        <Grid>
-          <Row>
-            <Col sm={2} md={2}>Priority:</Col>
-            <Col>{action.priority}</Col>
-          </Row>
-          {action.startAt ? <Row>
-            <Col sm={2} md={2}>Start at:</Col>
-            <Col>{action.startAt}</Col>
-          </Row> : null}
-          {action.dueAt ? <Row>
-            <Col sm={2} md={2}>Due at:</Col>nopm
-            <Col>{action.dueAt}</Col>
-          </Row> : null}
-        </Grid>
-        <EditAction action={action} />
-      </Panel.Body>
-    </Panel>
+    <Form onSubmit={handleSubmit}>
+      <FormGroup>
+        <InputGroup>
+          <Field name="shortDescription" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
+          <SplitButton
+            componentClass={InputGroup.Button}
+            title={<Glyphicon glyph="plus" />}
+            onClick={handleSubmit}
+            disabled={!valid || pristine || submitting}
+            id="add_action_folder_select"
+          >
+            <MenuItem key="1">Item</MenuItem>
+          </SplitButton>
+        </InputGroup>
+      </FormGroup>
+    </Form>
   );
 }
 
-Action.propTypes = {
+EditAction.propTypes = {
   action: React.PropTypes.object,
   folders: React.PropTypes.object,
   contexts: React.PropTypes.object,
@@ -74,5 +69,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 //export default reduxForm({ form: formName })(connect(mapStateToProps, mapDispatchToProps)(Action));
-export default Action;
+export default EditAction;
 
