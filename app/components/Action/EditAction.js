@@ -7,10 +7,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import styled from 'styled-components';
-import { Panel, Grid, Row, Col, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Panel, Grid, Row, Col, FormGroup, InputGroup, Button, MenuItem, Glyphicon } from 'react-bootstrap';
 import { Form, Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
 import ActionHeader from './ActionHeader';
+import rest from '../../rest';
+
 
 export class EditAction extends React.PureComponent {
   componentDidMount() {
@@ -18,34 +20,30 @@ export class EditAction extends React.PureComponent {
   }
 
   render() {
-    const { dispatch, action, folders, contexts } = this.props;
+    const { dispatch, action, folders, contexts, data } = this.props;
 
     const disabled = false;
     const color = undefined;
 
-    const handleSubmit = () => {
+    const handleUpdate = () => {
+      dispatch(rest.actions.actions.put(
+        { id: action.id },
+        { body: JSON.stringify({ ...action, ...data }) }));
     };
+
     const valid = true;
     const pristine = true;
     const submitting = true;
 
     return (
-      <Form onSubmit={handleSubmit} key={`editAction${action.id}`}>
+      <Form onSubmit={handleUpdate} key={`editAction${action.id}`}>
         <FormGroup>
           <InputGroup>
             <Field name="shortDescription" component="input" className="form-control" type="text"
                    placeholder="Add to collectbox..."/>
-            <SplitButton
-              componentClass={InputGroup.Button}
-              title={<Glyphicon glyph="plus"/>}
-              onClick={handleSubmit}
-              disabled={!valid || pristine || submitting}
-              id="add_action_folder_select"
-            >
-              <MenuItem key="1">Item</MenuItem>
-            </SplitButton>
           </InputGroup>
         </FormGroup>
+        <Button onClick={handleUpdate} bsStyle="primary">Save</Button>
       </Form>
     );
   }
@@ -61,8 +59,8 @@ EditAction.propTypes = {
 
 const formName = 'editAction';
 
-const mapStateToProps = (state) => {
-  const selector = formValueSelector(formName);
+const mapStateToProps = (state, props) => {
+  const selector = formValueSelector(props.form);
   return {
     data: {
       shortDescription: selector(state, 'shortDescription'),
