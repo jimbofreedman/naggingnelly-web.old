@@ -7,40 +7,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import styled from 'styled-components';
-import { Panel, Grid, Row, Col, Form, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
-import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
+import { Panel, Grid, Row, Col, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Form, Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
 import ActionHeader from './ActionHeader';
 
-function EditAction(props) {
-  const { dispatch, action, folders, contexts } = props;
+export class EditAction extends React.PureComponent {
+  componentDidMount() {
+    this.props.initialize(this.props.action);
+  }
 
-  const disabled = false;
-  const color = undefined;
+  render() {
+    const { dispatch, action, folders, contexts } = this.props;
 
-  const handleSubmit = () => {};
-  const valid = true;
-  const pristine = true;
-  const submitting = true;
+    const disabled = false;
+    const color = undefined;
 
-  return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <InputGroup>
-          <Field name="shortDescription" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
-          <SplitButton
-            componentClass={InputGroup.Button}
-            title={<Glyphicon glyph="plus" />}
-            onClick={handleSubmit}
-            disabled={!valid || pristine || submitting}
-            id="add_action_folder_select"
-          >
-            <MenuItem key="1">Item</MenuItem>
-          </SplitButton>
-        </InputGroup>
-      </FormGroup>
-    </Form>
-  );
+    const handleSubmit = () => {
+    };
+    const valid = true;
+    const pristine = true;
+    const submitting = true;
+
+    return (
+      <Form onSubmit={handleSubmit} key={`editAction${action.id}`}>
+        <FormGroup>
+          <InputGroup>
+            <Field name="shortDescription" component="input" className="form-control" type="text"
+                   placeholder="Add to collectbox..."/>
+            <SplitButton
+              componentClass={InputGroup.Button}
+              title={<Glyphicon glyph="plus"/>}
+              onClick={handleSubmit}
+              disabled={!valid || pristine || submitting}
+              id="add_action_folder_select"
+            >
+              <MenuItem key="1">Item</MenuItem>
+            </SplitButton>
+          </InputGroup>
+        </FormGroup>
+      </Form>
+    );
+  }
 }
 
 EditAction.propTypes = {
@@ -68,6 +76,10 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-//export default reduxForm({ form: formName })(connect(mapStateToProps, mapDispatchToProps)(Action));
-export default EditAction;
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
+  form:"irrelevant",
+  fields: ["shortDescription"],
+  enableReinitialize: true
+})(EditAction));
+
 

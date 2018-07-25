@@ -42,7 +42,7 @@ function Action(props) {
             <Col>{action.dueAt}</Col>
           </Row> : null}
         </Grid>
-        <EditAction action={action} />
+        <EditAction action={action} form={`editAction${action.id}`} />
       </Panel.Body>
     </Panel>
   );
