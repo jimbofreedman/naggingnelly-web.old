@@ -6,7 +6,8 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-import { Panel, Grid, Row, Col } from 'react-bootstrap';
+import { Panel, Grid, Row, Col, Form, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Field } from 'redux-form/immutable';
 
 import ActionHeader from './ActionHeader';
 
@@ -15,6 +16,11 @@ function Action(props) {
 
   const disabled = false;
   const color = undefined;
+
+  const handleSubmit = () => {};
+  const valid = true;
+  const pristine = true;
+  const submitting = true;
 
   return (
     <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
@@ -34,6 +40,22 @@ function Action(props) {
             <Col>{action.dueAt}</Col>
           </Row> : null}
         </Grid>
+        <Form onSubmit={handleSubmit}>
+          <FormGroup>
+            <InputGroup>
+              <Field name="shortDescription" component="input" className="form-control" type="text" placeholder="Add to collectbox..." />
+              <SplitButton
+                componentClass={InputGroup.Button}
+                title={<Glyphicon glyph="plus" />}
+                onClick={handleSubmit}
+                disabled={!valid || pristine || submitting}
+                id="add_action_folder_select"
+              >
+                <MenuItem key="1">Item</MenuItem>
+              </SplitButton>
+            </InputGroup>
+          </FormGroup>
+        </Form>
       </Panel.Body>
     </Panel>
   );
