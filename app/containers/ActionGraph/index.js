@@ -39,12 +39,19 @@ const nodeInternalText = css`
 
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
+    const width = 1000;
+    const height = 1000;
     const { actions } = this.props;
 
-    //   g = svg.append("g").attr("transform", "translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")");
+    //   g = svg.append("g").attr("transform", );
+
+    if (!actions.sync) {
+      return <div>Loading...</div>
+    }
 
     var stratify = d3.stratify()
-      .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+      .id((d) => d.path)
+      .parentId(function(d) { return d.path.substring(0, d.path.lastIndexOf(".")); });
 
     var tree = d3.tree()
       .size([2 * Math.PI, 500])
@@ -303,37 +310,53 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       { id: "flare.vis.operator.OperatorSwitch", value: "2581" },
       { id: "flare.vis.operator.SortOperator", value: "2023" },
       { id: "flare.vis.Visualization", value: "16540" },
-    ];
+    ]
 
-    var mapped = actions.data
+    const getDependencies = (path) => (id) => {
+      const action = actions.data[id];
+      return [{ path: `${path}.${id}` }].concat(action.dependencies.map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
+    };
+
+    var mapped = [{
+      path: "start",
+      shortDescription: "WIN",
+    }].concat(Object.keys(actions.data).map((id) => {
+      return getDependencies("start")(id);
+    }).reduce((acc, val) => acc.concat(val), []));
+
+    console.log(mapped);
       
-    var root = tree(stratify(data));
+    var root = tree(stratify(mapped));
 
     function radialPoint(x, y) {
       return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
     }
 
-    const renderNode = (d) => [
-      <g
-        key={d.id}
-        class={"node" + (d.children ? " node--internal" : " node--leaf")}
-        transform={"translate(" + radialPoint(d.x, d.y) + ")"}
-      >
-        <circle
-          r="2.5"
-          style={ { fill: (d.children ? "#555555" : "#999999") } }
-        />
-        <text
-          cssClass={nodeText}
-          dy="0.31em"
-          x={d.x < Math.PI === !d.children ? 6 : -6}
-          text-anchor={d.x < Math.PI === !d.children ? "start" : "end"}
-          transform={"rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"}
+    const renderNode = (d) => {
+      const id = d.id.substring(d.id.lastIndexOf(".") + 1);
+      const action = id === "start" ? { shortDescription: "WIN" } : actions.data[id];
+      return [
+        <g
+          key={d.id}
+          class={"node" + (d.children ? " node--internal" : " node--leaf")}
+          transform={"translate(" + radialPoint(d.x, d.y) + ")"}
         >
-          {d.id.substring(d.id.lastIndexOf(".") + 1)}
-        </text>
-      </g>
-    ].concat(d.children ? d.children.map(renderNode) : []);
+          <circle
+            r="2.5"
+            style={ { fill: (d.children ? "#555555" : "#999999") } }
+          />
+          <text
+            cssClass={nodeText}
+            dy="0.31em"
+            x={d.x < Math.PI === !d.children ? 6 : -6}
+            text-anchor={d.x < Math.PI === !d.children ? "start" : "end"}
+            transform={"rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"}
+          >
+            {action.shortDescription}
+          </text>
+        </g>
+      ].concat(d.children ? d.children.map(renderNode) : []);
+    };
 
     const renderLinks = (d) => d.links().map((l) =>
       <path
@@ -351,8 +374,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       (<div>Loading</div>)
       :
       (
-        <svg width={960} height={1060}>
-          <g transform="translate(520, 620)">
+        <svg width={width} height={height}>
+          <g transform={"translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")"}>
             {renderNode(root)};
             {renderLinks(root)};
           </g>
