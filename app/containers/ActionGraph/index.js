@@ -86,7 +86,6 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       return [
         <g
           key={d.id}
-          class={'node' + (d.children ? ' node--internal' : ' node--leaf')}
           transform={'translate(' + radialPoint(d.x, d.y) + ')'}
         >
           <circle
@@ -94,10 +93,9 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
             style={ { fill: (d.children ? '#555555' : '#999999') } }
           />
           <text
-            cssClass={nodeText}
             dy="0.31em"
             x={d.x < Math.PI === !d.children ? 6 : -6}
-            text-anchor={d.x < Math.PI === !d.children ? 'start' : 'end'}
+            textAnchor={d.x < Math.PI === !d.children ? 'start' : 'end'}
             transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
           >
             {action.shortDescription}
@@ -108,13 +106,18 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
 
     const renderLinks = (d) => d.links().map((l) =>
       <path
+        key={`${l.source.id}:${l.target.id}`}
         style={ {
           fill: 'none',
           stroke: '#555',
           strokeOpacity: 0.4,
           strokeWidth: '1.5px',
         } }
-        d={d3.linkRadial().angle(function(d) { return d.x; }).radius(function(d) { return d.y; })(l)}
+        d={d3.linkRadial().angle(function (d) {
+          return d.x;
+        }).radius(function (d) {
+          return d.y;
+        })(l)}
       />
     );
 
