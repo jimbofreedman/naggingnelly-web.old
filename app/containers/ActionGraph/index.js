@@ -39,8 +39,8 @@ const nodeInternalText = css`
 
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const width = 1000;
-    const height = 1000;
+    const width = 2000;
+    const height = 2000;
     const { actions } = this.props;
 
     //   g = svg.append('g").attr("transform", );
@@ -54,7 +54,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       .parentId(function(d) { return d.path.substring(0, d.path.lastIndexOf('.')); });
 
     var tree = d3.tree()
-      .size([2 * Math.PI, 500])
+      .size([2 * Math.PI, 1000])
       .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
     
     const getDependencies = (path) => (id) => {
@@ -125,7 +125,13 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       (<div>Loading</div>)
       :
       (
-        <svg width={width} height={height}>
+        <svg
+          width="100%"
+          height={2000}
+          viewbox={`0 0 ${width} ${height}`}
+          style={{borderWidth:"2px", borderColor: "black", borderStyle: "solid"}}
+          preserveAspectRatio="xMinyMin meet"
+        >
           <g transform={'translate(' + ((width / 2) + 40) + ',' + ((height / 2) + 90) + ')'}>
             {renderNode(root)};
             {renderLinks(root)};

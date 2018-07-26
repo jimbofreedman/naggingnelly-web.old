@@ -22,12 +22,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     return (
       <div>
         <h1>PRIMARY GOAL: SLEEP BETWEEN 2300 and 0700</h1>
-        <Grid>
+        <Grid fluid>
           <Row>
-            <Col sm={12} md={12} lg={4}>
+            <Col sm={12} md={12} lg={2}>
               <ActionList />
             </Col>
-            <Col xsHidden mdHidden lg={8}>
+            <Col xsHidden mdHidden lg={10}>
               <ActionGraph />
             </Col>
           </Row>
