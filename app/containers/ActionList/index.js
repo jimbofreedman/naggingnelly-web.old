@@ -46,7 +46,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
     const handleSubmit = () => {};
     const { actions, folders, contexts, dispatch, filters } = this.props;
 
-    return (!actions.sync || !folders.sync) ?
+    return (!actions.sync || !folders.sync || !contexts.sync) ?
       (<div>Loading</div>)
       :
       (

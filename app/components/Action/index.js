@@ -5,8 +5,11 @@
 */
 
 import React from 'react';
+import { connect } from 'react-redux';
 // import styled from 'styled-components';
-import { Panel, Grid, Row, Col } from 'react-bootstrap';
+import { Panel, Grid, Row, Col, Form, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
+import EditAction from './EditAction';
 
 import ActionHeader from './ActionHeader';
 
@@ -15,6 +18,11 @@ function Action(props) {
 
   const disabled = false;
   const color = undefined;
+
+  const handleSubmit = () => {};
+  const valid = true;
+  const pristine = true;
+  const submitting = true;
 
   return (
     <Panel key={action.id} eventKey={action.id} bsStyle={color} disabled={disabled}>
@@ -34,6 +42,7 @@ function Action(props) {
             <Col>{action.dueAt}</Col>
           </Row> : null}
         </Grid>
+        <EditAction action={action} form={`editAction${action.id}`} />
       </Panel.Body>
     </Panel>
   );
@@ -46,4 +55,24 @@ Action.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
+
+const formName = 'editAction';
+
+const mapStateToProps = (state) => {
+  const selector = formValueSelector(formName);
+  return {
+    data: {
+      shortDescription: selector(state, 'shortDescription'),
+    },
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
+
+//export default reduxForm({ form: formName })(connect(mapStateToProps, mapDispatchToProps)(Action));
 export default Action;
+
