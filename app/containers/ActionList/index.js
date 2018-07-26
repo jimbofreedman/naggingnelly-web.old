@@ -30,7 +30,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
   }
 
   componentDidMount() {
-    // this.interval = setInterval(this.refresh, 10000);
+    this.interval = setInterval(this.refresh, 10000);
     this.refresh();
   }
 

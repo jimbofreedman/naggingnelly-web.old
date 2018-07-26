@@ -59,18 +59,18 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     
     const getDependencies = (path) => (id) => {
       const action = actions.data[id];
-
-      if (action.status != 0) {
-        return [];
-      }
-
       return [{ path: `${path}.${id}` }].concat(action.dependencies.map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
     };
 
     var mapped = [{
       path: 'start',
       shortDescription: 'WIN',
-    }].concat(Object.keys(actions.data).map((id) => {
+    }].concat(Object.keys(actions.data)
+      .filter((id) => {
+        const action = actions.data[id];
+        return action.status === 0;
+      })
+      .map((id) => {
       return getDependencies('start')(id);
     }).reduce((acc, val) => acc.concat(val), []));
 
