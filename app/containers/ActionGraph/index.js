@@ -87,6 +87,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
         <g
           key={d.id}
           transform={'translate(' + radialPoint(d.x, d.y) + ')'}
+          onClick={(e) => console.log("NODE", d)}
         >
           <circle
             r="2.5"
@@ -111,13 +112,14 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
           fill: 'none',
           stroke: '#555',
           strokeOpacity: 0.4,
-          strokeWidth: '1.5px',
+          strokeWidth: '3px',
         } }
         d={d3.linkRadial().angle(function (d) {
           return d.x;
         }).radius(function (d) {
           return d.y;
         })(l)}
+        onClick={(e) => console.log("LINK", l)}
       />
     );
 
@@ -133,8 +135,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
           preserveAspectRatio="xMinyMin meet"
         >
           <g transform={'translate(' + ((width / 2) + 40) + ',' + ((height / 2) + 90) + ')'}>
-            {renderNode(root)};
             {renderLinks(root)};
+            {renderNode(root)};
           </g>
         </svg>
       );
