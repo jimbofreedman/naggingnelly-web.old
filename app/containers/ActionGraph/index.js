@@ -100,7 +100,7 @@ const GraphLink = DragSource("LINK", knightSource, collectDrag)(({d, action, con
       onClick={() => this.setState({ selectedType: "node", selectedItem: [l.source.id, l.target.id]})}
     />
   );
-}));
+});
 
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
