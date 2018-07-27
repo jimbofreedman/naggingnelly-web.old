@@ -85,7 +85,6 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
 const GraphLink = DragSource("LINK", knightSource, collectDrag)(({l, connectDragSource, isDragging}) => {
   return connectDragSource(
     <path
-      key={`${l.source.id}:${l.target.id}`}
       style={ {
         fill: 'none',
         stroke: '#555',
@@ -166,7 +165,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
-    const renderLinks = (d) => d.links().map((l) => <GraphLink l={l}/>);
+    const renderLinks = (d) => d.links().map((l) => <GraphLink key={`${l.source.id}-${l.target.id}`}l={l}/>);
 
     return (!actions.sync) ?
       (<div>Loading</div>)
