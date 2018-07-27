@@ -22,6 +22,7 @@ import { css } from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import MouseBackend from 'react-dnd-mouse-backend';
 import { DragSource, DropTarget } from 'react-dnd';
+import rest from '../../rest';
 
 const knightSource = {
   beginDrag(props) {
@@ -35,6 +36,7 @@ const squareTarget = {
     console.log("endDrag");
     console.log(monitor.getItem().shortDescription);
     console.log(props.action.shortDescription);
+    props.dispatch(rest.actions.actions.addDependency(monitor.getItem().id, props.action.id));
   }
 };
 
@@ -129,7 +131,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       const id = d.id.substring(d.id.lastIndexOf('.') + 1);
       const action = id === 'start' ? { shortDescription: 'WIN' } : actions.data[id];
       return [
-        <GraphNode key={d.id} d={d} action={action} />
+        <GraphNode key={d.id} d={d} action={action} dispatch={this.props.dispatch} />
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
@@ -183,8 +185,8 @@ const mapStateToProps = createStructuredSelector({
   actions: makeSelectActions(),
 });
 
-function mapDispatchToProps() {
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {dispatch};
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
