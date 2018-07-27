@@ -21,30 +21,62 @@ import * as d3 from "d3";
 import { css } from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import MouseBackend from 'react-dnd-mouse-backend';
+import { DragSource, DropTarget } from 'react-dnd';
+
+const knightSource = {
+  beginDrag(props) {
+    console.log("beginDrag");
+    return props.action;
+  }
+};
+
+const squareTarget = {
+  drop(props, monitor) {
+    console.log("endDrag");
+    console.log(monitor.getItem().shortDescription);
+    console.log(props.action.shortDescription);
+  }
+};
+
+function collectDrag(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  }
+}
+
+function collectDrop(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  }
+}
 
 function radialPoint(x, y) {
   return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
 }
 
-const GraphNode = ({d, action}) => (
-  <g
-    transform={'translate(' + radialPoint(d.x, d.y) + ')'}
-    onClick={() => this.setState({ selectedType: "node", selectedItem: id})}
-  >
-    <circle
-      r="2.5"
-      style={ { fill: (d.children ? '#555555' : '#999999') } }
-    />
-    <text
-      dy="0.31em"
-      x={d.x < Math.PI ? 6 : -6}
-      textAnchor={d.x < Math.PI ? 'start' : 'end'}
-      transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
+const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("ACTION", knightSource, collectDrag)(({d, action, connectDragSource, isDragging, connectDropTarget, isOver}) => {
+  return connectDropTarget(connectDragSource(
+    <g
+      transform={'translate(' + radialPoint(d.x, d.y) + ')'}
+      onClick={() => this.setState({ selectedType: "node", selectedItem: d.id })}
     >
-      {action.shortDescription}
-    </text>
-  </g>
-);
+      <circle
+        r="2.5"
+        style={ { fill: (d.children ? '#555555' : '#999999') } }
+      />
+      <text
+        dy="0.31em"
+        x={d.x < Math.PI ? 6 : -6}
+        textAnchor={d.x < Math.PI ? 'start' : 'end'}
+        transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
+      >
+        {action.shortDescription}
+      </text>
+    </g>
+  ));
+}));
 
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
