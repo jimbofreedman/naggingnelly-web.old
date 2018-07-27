@@ -81,6 +81,27 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
   ));
 }));
 
+
+const GraphLink = DragSource("LINK", knightSource, collectDrag)(({d, action, connectDragSource, isDragging}) => {
+  return connectDragSource(
+    <path
+      key={`${l.source.id}:${l.target.id}`}
+      style={ {
+        fill: 'none',
+        stroke: '#555',
+        strokeOpacity: 0.4,
+        strokeWidth: '3px',
+      } }
+      d={d3.linkRadial().angle(function (d) {
+        return d.x;
+      }).radius(function (d) {
+        return d.y;
+      })(l)}
+      onClick={() => this.setState({ selectedType: "node", selectedItem: [l.source.id, l.target.id]})}
+    />
+  );
+}));
+
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props)
@@ -130,7 +151,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     }].concat(Object.keys(actions.data)
       .filter((id) => {
         const action = actions.data[id];
-        return action.status === 0 && action.dependencies.length === 0;
+        return action.status === 0 && action.dependencies.length === 0 && action.folder != 1; // todo other people's folders
       })
       .map((id) => {
       return getDependencies('start')(id);
@@ -146,23 +167,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
-    const renderLinks = (d) => d.links().map((l) =>
-      <path
-        key={`${l.source.id}:${l.target.id}`}
-        style={ {
-          fill: 'none',
-          stroke: '#555',
-          strokeOpacity: 0.4,
-          strokeWidth: '3px',
-        } }
-        d={d3.linkRadial().angle(function (d) {
-          return d.x;
-        }).radius(function (d) {
-          return d.y;
-        })(l)}
-        onClick={() => this.setState({ selectedType: "node", selectedItem: [l.source.id, l.target.id]})}
-      />
-    );
+    const renderLinks = (d) => d.links().map((l) => <GraphLink l={l}/>);
 
     return (!actions.sync) ?
       (<div>Loading</div>)
