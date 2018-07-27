@@ -125,6 +125,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       return getDependencies('start')(id);
     }).reduce((acc, val) => acc.concat(val), []));
 
+    console.log(mapped);
+
     var root = tree(stratify(mapped));
 
     const renderNode = (d) => {
@@ -163,9 +165,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
           <svg
             width="100%"
             height={2000}
-            viewbox={`0 0 ${width} ${height}`}
+            viewBox={`0 0 ${width} ${height}`}
             style={{borderWidth:"2px", borderColor: "black", borderStyle: "solid"}}
-            preserveAspectRatio="xMinyMin meet"
           >
             <g transform={'translate(' + ((width / 2) + 40) + ',' + ((height / 2) + 90) + ')'}>
               {renderLinks(root)};
