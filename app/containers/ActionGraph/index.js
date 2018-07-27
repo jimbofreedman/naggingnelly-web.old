@@ -107,10 +107,20 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     var tree = d3.tree()
       .size([2 * Math.PI, 1000])
       .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
-    
+
+    const depOns = {};
+    Object.keys(actions.data).forEach((actionId) => {
+      const action = actions.data[actionId];
+      action.dependencies.forEach((dependencyId) => {
+        if (!depOns[dependencyId]) {
+          depOns[dependencyId] = []
+        }
+        depOns[dependencyId].push(actionId);
+      });
+    });
+
     const getDependencies = (path) => (id) => {
-      const action = actions.data[id];
-      return [{ path: `${path}.${id}` }].concat(action.dependencies.map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
+      return [{ path: `${path}.${id}` }].concat(!depOns[id] ? [] : depOns[id].map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
     };
 
     var mapped = [{
@@ -119,7 +129,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     }].concat(Object.keys(actions.data)
       .filter((id) => {
         const action = actions.data[id];
-        return action.status === 0;
+        return action.status === 0 && action.dependencies.length === 0;
       })
       .map((id) => {
       return getDependencies('start')(id);
