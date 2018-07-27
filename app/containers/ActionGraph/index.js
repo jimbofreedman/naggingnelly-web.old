@@ -82,7 +82,7 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
 }));
 
 
-const GraphLink = DragSource("LINK", knightSource, collectDrag)(({d, action, connectDragSource, isDragging}) => {
+const GraphLink = DragSource("LINK", knightSource, collectDrag)(({l, connectDragSource, isDragging}) => {
   return connectDragSource(
     <path
       key={`${l.source.id}:${l.target.id}`}
@@ -97,7 +97,6 @@ const GraphLink = DragSource("LINK", knightSource, collectDrag)(({d, action, con
       }).radius(function (d) {
         return d.y;
       })(l)}
-      onClick={() => this.setState({ selectedType: "node", selectedItem: [l.source.id, l.target.id]})}
     />
   );
 });
