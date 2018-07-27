@@ -26,17 +26,17 @@ import rest from '../../rest';
 
 const knightSource = {
   beginDrag(props) {
-    console.log("beginDrag");
     return props.action;
   }
 };
 
 const squareTarget = {
   drop(props, monitor) {
-    console.log("endDrag");
-    console.log(monitor.getItem().shortDescription);
-    console.log(props.action.shortDescription);
-    props.dispatch(rest.actions.actions.addDependency(monitor.getItem().id, props.action.id));
+    const fromId = monitor.getItem().id;
+    const toId = props.action.id;
+    if (fromId != toId) {
+      props.dispatch(rest.actions.actions.addDependency(fromId, toId));
+    }
   }
 };
 
@@ -62,7 +62,7 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
   return connectDropTarget(connectDragSource(
     <g
       transform={'translate(' + radialPoint(d.x, d.y) + ')'}
-      onClick={() => this.setState({ selectedType: "node", selectedItem: d.id })}
+      style={ { fill: (isOver ? '#00cccc' : undefined) } }
     >
       <circle
         r="2.5"
@@ -73,6 +73,7 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
         x={d.x < Math.PI ? 6 : -6}
         textAnchor={d.x < Math.PI ? 'start' : 'end'}
         transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
+
       >
         {action.shortDescription}
       </text>
@@ -134,8 +135,6 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       .map((id) => {
       return getDependencies('start')(id);
     }).reduce((acc, val) => acc.concat(val), []));
-
-    console.log(mapped);
 
     var root = tree(stratify(mapped));
 
