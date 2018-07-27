@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { Button, Glyphicon } from 'react-bootstrap';
 
@@ -17,10 +18,10 @@ function ActionButton({ glyph, disabled, bsStyle, onClick }) {
 }
 
 ActionButton.propTypes = {
-  glyph: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  bsStyle: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  glyph: PropTypes.string,
+  disabled: PropTypes.bool,
+  bsStyle: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default ActionButton;

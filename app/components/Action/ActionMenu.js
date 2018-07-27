@@ -18,7 +18,7 @@ function ActionMenu({ action }) {
 }
 
 ActionMenu.propTypes = {
-  action: React.PropTypes.object,
+  action: PropTypes.object,
 };
 
 export default ActionMenu;

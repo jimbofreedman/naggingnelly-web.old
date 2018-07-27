@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { ButtonGroup, DropdownButton, Glyphicon, MenuItem, Panel } from 'react-bootstrap';
 import { ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
@@ -86,10 +87,10 @@ function ActionHeader(props) {
 }
 
 ActionHeader.propTypes = {
-  action: React.PropTypes.object,
-  folders: React.PropTypes.object,
-  contexts: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
+  action: PropTypes.object,
+  folders: PropTypes.object,
+  contexts: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 export default ActionHeader;

@@ -4,7 +4,9 @@
  *
  */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { Form, FormGroup, InputGroup, Glyphicon, SplitButton, MenuItem } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
@@ -46,11 +48,11 @@ function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
 
 AddAction.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  data: React.PropTypes.object,
-  pristine: React.PropTypes.bool,
-  submitting: React.PropTypes.bool,
-  valid: React.PropTypes.bool,
-  reset: React.PropTypes.func,
+  data: PropTypes.object,
+  pristine: PropTypes.bool,
+  submitting: PropTypes.bool,
+  valid: PropTypes.bool,
+  reset: PropTypes.func,
 };
 
 const formName = 'addAction';

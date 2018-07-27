@@ -19,23 +19,32 @@ import reducer from './reducer';
 import saga from './saga';
 import * as d3 from "d3";
 import { css } from 'styled-components';
+import { DragDropContext } from 'react-dnd';
+import MouseBackend from 'react-dnd-mouse-backend';
 
+function radialPoint(x, y) {
+  return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
+}
 
-const nodeCircle = css`
-  fill: #999;
-`
-
-const nodeText = css`
-  font: 10px sans-serif;
-`
-
-const nodeInternalCircle = css`
-  fill: #555;
-`
-
-const nodeInternalText = css`
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-`
+const GraphNode = ({d, action}) => (
+  <g
+    transform={'translate(' + radialPoint(d.x, d.y) + ')'}
+    onClick={() => this.setState({ selectedType: "node", selectedItem: id})}
+  >
+    <circle
+      r="2.5"
+      style={ { fill: (d.children ? '#555555' : '#999999') } }
+    />
+    <text
+      dy="0.31em"
+      x={d.x < Math.PI ? 6 : -6}
+      textAnchor={d.x < Math.PI ? 'start' : 'end'}
+      transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
+    >
+      {action.shortDescription}
+    </text>
+  </g>
+);
 
 class ActionGraph extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -84,32 +93,11 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
 
     var root = tree(stratify(mapped));
 
-    function radialPoint(x, y) {
-      return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
-    }
-
     const renderNode = (d) => {
       const id = d.id.substring(d.id.lastIndexOf('.') + 1);
       const action = id === 'start' ? { shortDescription: 'WIN' } : actions.data[id];
       return [
-        <g
-          key={d.id}
-          transform={'translate(' + radialPoint(d.x, d.y) + ')'}
-          onClick={() => this.setState({ selectedType: "node", selectedItem: id})}
-        >
-          <circle
-            r="2.5"
-            style={ { fill: (d.children ? '#555555' : '#999999') } }
-          />
-          <text
-            dy="0.31em"
-            x={d.x < Math.PI ? 6 : -6}
-            textAnchor={d.x < Math.PI ? 'start' : 'end'}
-            transform={'rotate(' + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ')'}
-          >
-            {action.shortDescription}
-          </text>
-        </g>
+        <GraphNode key={d.id} d={d} action={action} />
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
@@ -176,4 +164,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(ActionGraph);
+)(DragDropContext(MouseBackend)(ActionGraph));

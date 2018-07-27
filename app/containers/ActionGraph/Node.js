@@ -31,7 +31,7 @@ function Node({ node }) {
 }
 
 Node.propTypes = {
-  node: React.PropTypes.object,
+  node: PropTypes.object,
 };
 
 export default Node;

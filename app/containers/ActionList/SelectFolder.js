@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
@@ -24,9 +25,9 @@ function SelectFolder({ input, data, onChange }) {
 }
 
 SelectFolder.propTypes = {
-  input: React.PropTypes.object,
-  data: React.PropTypes.object,
-  onChange: React.PropTypes.func,
+  input: PropTypes.object,
+  data: PropTypes.object,
+  onChange: PropTypes.func,
 };
 
 export default SelectFolder;

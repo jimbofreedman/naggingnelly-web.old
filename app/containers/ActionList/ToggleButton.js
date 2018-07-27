@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
@@ -21,8 +22,8 @@ function ToggleButton({ input, label }) {
 }
 
 ToggleButton.propTypes = {
-  input: React.PropTypes.object,
-  label: React.PropTypes.string,
+  input: PropTypes.object,
+  label: PropTypes.string,
 };
 
 export default ToggleButton;

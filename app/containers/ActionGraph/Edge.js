@@ -23,7 +23,7 @@ function Edge({ edge }) {
 }
 
 Edge.propTypes = {
-  edge: React.PropTypes.object,
+  edge: PropTypes.object,
 };
 
 export default Edge;

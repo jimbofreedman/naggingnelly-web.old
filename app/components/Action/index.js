@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { Panel, Grid, Row, Col, Form, FormGroup, InputGroup, SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
@@ -49,10 +50,10 @@ function Action(props) {
 }
 
 Action.propTypes = {
-  action: React.PropTypes.object,
-  folders: React.PropTypes.object,
-  contexts: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
+  action: PropTypes.object,
+  folders: PropTypes.object,
+  contexts: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 

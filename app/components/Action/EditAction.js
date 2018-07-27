@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { Panel, Grid, Row, Col, FormGroup, InputGroup, Button, MenuItem, Glyphicon } from 'react-bootstrap';
 import { Form, Field, reduxForm, formValueSelector } from 'redux-form/immutable';
@@ -50,10 +51,10 @@ export class EditAction extends React.PureComponent {
 }
 
 EditAction.propTypes = {
-  action: React.PropTypes.object,
-  folders: React.PropTypes.object,
-  contexts: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
+  action: PropTypes.object,
+  folders: PropTypes.object,
+  contexts: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 
