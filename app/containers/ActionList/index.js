@@ -75,8 +75,8 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
                   return action.status === 0 &&
                     (filters.showFuture || (!action.startAt || new Date(action.startAt) <= new Date())) &&
                     (action.folder === filters.folder) &&
-                    (!action.dependencies ||
-                    !action.dependencies.filter((a) => actions.data[a].status === 0).length) ? (
+                    (!action.dependsOn ||
+                    !action.dependsOn.filter((a) => actions.data[a].status === 0).length) ? (
                       <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                   ) : null;
                 })

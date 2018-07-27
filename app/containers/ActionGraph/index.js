@@ -62,7 +62,7 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
   return connectDropTarget(connectDragSource(
     <g
       transform={'translate(' + radialPoint(d.x, d.y) + ')'}
-      style={ { fill: (isOver ? '#00cccc' : undefined) } }
+      style={ { fill: (isDragging ? '#cccc00' : (isOver ? '#00cccc' : undefined)) } }
     >
       <circle
         r="2.5"

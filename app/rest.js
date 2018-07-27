@@ -105,7 +105,7 @@ export default reduxApi({
     },
   },
   actions: {
-    url: '/gtd/actions/(:id)/(:fn)/?dependency_action_id=(:otherId)',
+    url: '/gtd/actions/(:id)/(:fn)/',
     transformer: dictionaryTransformer,
     crud: true,
     reducerName: 'actions',
@@ -120,7 +120,10 @@ export default reduxApi({
         return [{ id, fn: 'fail' }, { method: 'post' }];
       },
       addDependency(id, otherId) {
-        return [{ id, fn: 'add_dependency', otherId }, { method: 'post' }];
+        return [
+          { id, fn: 'add_dependency', "dependency_action_id": otherId },
+          { method: 'post' }
+        ];
       },
       syncSince(updatedSince) {
         return [{ updatedSince }];
