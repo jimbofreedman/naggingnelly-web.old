@@ -22,6 +22,7 @@ import { makeSelectActions, makeSelectFolders, makeSelectContexts } from '../App
 import Action from '../../components/Action';
 import SelectFolder from './SelectFolder';
 import ToggleButton from './ToggleButton';
+import config from '../../config';
 
 export class ActionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -30,12 +31,16 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.refresh, 10000);
+    if (config.autoRefresh) {
+      this.interval = setInterval(this.refresh, 10000);
+    }
     this.refresh();
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    if (config.autoRefresh) {
+      clearInterval(this.interval);
+    }
   }
 
   refresh() {
