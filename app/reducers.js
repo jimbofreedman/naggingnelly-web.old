@@ -41,11 +41,11 @@ function routeReducer(state = routeInitialState, action) {
 }
 
 
-function selectedActionIdReducer(state = fromJS(0), action) {
+function selectedActionIdReducer(state = fromJS({ id: 0 }), action) {
   switch (action.type) {
     /* istanbul ignore next */
     case 'app/ActionGraph/FOCUS_ON_ACTION':
-      return action.actionId;
+      return state.set('id', action.actionId);
     default:
       return state;
   }

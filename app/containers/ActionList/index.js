@@ -48,6 +48,8 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
   }
 
   render() {
+    console.log("rendering ACTIONLIST");
+
     const handleSubmit = () => {};
     const { actions, folders, contexts, dispatch, filters } = this.props;
 

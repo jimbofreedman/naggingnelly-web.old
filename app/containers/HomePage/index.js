@@ -10,6 +10,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { Grid, Row, Col } from 'react-bootstrap';
 
+import { makeSelectActions } from '../App/selectors';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import ActionList from 'containers/ActionList';
@@ -19,6 +20,10 @@ import saga from './saga';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
+    const { actions, selectedActionId } = this.props;
+    console.log("rendering HOME");
+    console.log(selectedActionId);
+
     return (
       <div>
         <h1>PRIMARY GOAL: SLEEP BETWEEN 2300 and 0700</h1>
@@ -28,7 +33,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               <ActionList />
             </Col>
             <Col xsHidden mdHidden lg={10}>
-              <ActionGraph />
+              <ActionGraph actions={actions} selectedActionId={selectedActionId} />
             </Col>
           </Row>
         </Grid>
@@ -44,7 +49,10 @@ export function mapDispatchToProps() {
   return {};
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  actions: makeSelectActions(),
+  selectedActionId: (state) => state.getIn(['selectedActionId', 'id']),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const withReducer = injectReducer({ key: 'home', reducer });

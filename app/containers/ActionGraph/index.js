@@ -131,7 +131,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   render() {
     const width = 1600;
     const height = 1600;
-    const { actions, selectedActionId, focusOnAction } = this.props;
+    const { actions, selectedActionId, focus } = this.props;
     const { selectedAction, totalRadius } = this.state;
 
     console.log("rendering ACTIONGRAPH");
@@ -208,8 +208,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       (
         <div>
           <div>Selected Action: { selectedAction ? selectedAction.shortDescription : 'None' }</div>
-          <Button disabled={!selectedAction} onClick={() => focusOnAction(selectedAction.id)}>Focus</Button>
-          <Button disabled={!selectedActionId} onClick={() => focusOnAction(0)}>Clear Focus</Button>
+          <Button disabled={!selectedAction} onClick={() => focus(selectedAction.id)}>Focus</Button>
+          <Button disabled={!selectedActionId} onClick={() => focus(0)}>Clear Focus</Button>
           <Button onClick={() => this.setState({ totalRadius: totalRadius + 100 })}><Glyphicon glyph="plus" /></Button>
           <Button onClick={() => this.setState({ totalRadius: totalRadius - 100 })}><Glyphicon glyph="minus" /></Button>
 
@@ -236,15 +236,12 @@ ActionGraph.propTypes = {
   selectedActionId: PropTypes.number,
 };
 
-const mapStateToProps = createStructuredSelector({
-  actions: makeSelectActions(),
-  selectedActionId: (state) => state.get('selectedActionId'),
-});
+const mapStateToProps = createStructuredSelector({});
 
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    focusOnAction: (id) => dispatch(focusOnAction(id)),
+    focus: (id) => dispatch(focusOnAction(id)),
     addDependency: (fromId, toId) => dispatch(rest.actions.actions.addDependency(fromId, toId)),
     removeDependency: (fromId, toId) => dispatch(rest.actions.actions.removeDependency(toId, fromId)),
   };
