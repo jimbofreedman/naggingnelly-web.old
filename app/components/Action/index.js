@@ -17,6 +17,8 @@ function Action(props) {
 
   const disabled = false;
 
+  console.log(`rendering ACTION ${action.id}`);
+
   return (
     <Panel key={action.id} eventKey={action.id} disabled={disabled}>
       <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts} />

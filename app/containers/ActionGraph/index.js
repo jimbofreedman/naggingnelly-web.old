@@ -43,7 +43,7 @@ const squareTarget = {
     const fromId = monitor.getItem().id;
     const toId = props.action.id;
     if (fromId !== toId) {
-      props.dispatch(rest.actions.actions.addDependency(fromId, toId));
+      props.addDependency(fromId, toId);
     }
   },
 };
@@ -53,7 +53,7 @@ const binTarget = {
     const getActionIdFromNodeId = (nodeId) => { return nodeId.substring(nodeId.lastIndexOf('.') + 1); };
     const fromId = getActionIdFromNodeId(monitor.getItem().sourceNodeId);
     const toId = getActionIdFromNodeId(monitor.getItem().targetNodeId);
-    props.dispatch(rest.actions.actions.removeDependency(toId, fromId));
+    props.removeDependency(fromId, toId);
   },
 };
 
@@ -75,12 +75,12 @@ const radialPoint = (x, y) => {
   return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
 };
 
-const DeleteLink = DropTarget('LINK', binTarget, collectDrop)(({ connectDropTarget, isOver }) =>
+const DeleteLink = DropTarget('LINK', binTarget, collectDrop)(({ connectDropTarget, isOver, removeDependency }) =>
   // Must wrap in div to satisfy DropTarget
   connectDropTarget(<circle r="20" style={{ fill: isOver ? '#990000' : '#000000' }} />)
 );
 
-const GraphNode = DropTarget('ACTION', squareTarget, collectDrop)(DragSource('ACTION', knightSource, collectDrag)(({ d, action, onClick, connectDragSource, isDragging, connectDropTarget, isOver }) =>
+const GraphNode = DropTarget('ACTION', squareTarget, collectDrop)(DragSource('ACTION', knightSource, collectDrag)(({ d, action, onClick, connectDragSource, isDragging, connectDropTarget, isOver, addDependency }) =>
   connectDropTarget(connectDragSource(
     <g
       transform={`translate(${radialPoint(d.x, d.y)})`}
@@ -89,7 +89,7 @@ const GraphNode = DropTarget('ACTION', squareTarget, collectDrop)(DragSource('AC
     >
       <circle
         r="4"
-        style={{ fill: (d.children ? '#555555' : '#999999') }}
+        style={{ fill: (d.children ? '#999999' : '#333333') }}
       />
       <text
         dy="0.31em"
@@ -131,8 +131,10 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   render() {
     const width = 1600;
     const height = 1600;
-    const { actions, selectedActionId } = this.props;
+    const { actions, selectedActionId, focusOnAction } = this.props;
     const { selectedAction, totalRadius } = this.state;
+
+    console.log("rendering ACTIONGRAPH");
 
     //   g = svg.append('g").attr("transform", );
 
@@ -172,7 +174,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     };
 
     const initial = selectedActionId ? { ...actions.data[selectedActionId], path: `${selectedActionId}` } : { path: 'start', shortDescription: 'WIN' };
-    const other = selectedActionId ? (!depOns[selectedActionId] ? [] : depOns[selectedActionId]) : Object.keys(actions.data).filter((id) => actions.data[id].dependencies.length === 0);
+    const other = selectedActionId ? (depOns[selectedActionId] || []) : Object.keys(actions.data).filter((id) => actions.data[id].dependencies.length === 0);
 
     const mapped = [initial].concat(other
       .filter((id) => {
@@ -192,8 +194,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
           key={d.id}
           d={d}
           action={action}
-          dispatch={this.props.dispatch}
           onClick={() => this.setState({ selectedAction: action })}
+          addDependency={this.props.addDependency}
         />,
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
@@ -206,8 +208,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       (
         <div>
           <div>Selected Action: { selectedAction ? selectedAction.shortDescription : 'None' }</div>
-          <Button disabled={!selectedAction} onClick={() => this.props.dispatch(focusOnAction(selectedAction.id))}>Focus</Button>
-          <Button disabled={!selectedActionId} onClick={() => this.props.dispatch(focusOnAction(0))}>Clear Focus</Button>
+          <Button disabled={!selectedAction} onClick={() => focusOnAction(selectedAction.id)}>Focus</Button>
+          <Button disabled={!selectedActionId} onClick={() => focusOnAction(0)}>Clear Focus</Button>
           <Button onClick={() => this.setState({ totalRadius: totalRadius + 100 })}><Glyphicon glyph="plus" /></Button>
           <Button onClick={() => this.setState({ totalRadius: totalRadius - 100 })}><Glyphicon glyph="minus" /></Button>
 
@@ -217,7 +219,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
             viewBox={`0 0 ${width} ${height}`}
             style={{ borderWidth: '2px', borderColor: 'black', borderStyle: 'solid' }}
           >
-            <DeleteLink dispatch={this.props.dispatch} />
+            <DeleteLink removeDependency={this.props.removeDependency} />
             <g transform={`translate(${((width / 2) + 40)},${((height / 2) + 90)})`}>
               {renderLinks(root)};
               {renderNode(root)};
@@ -240,7 +242,12 @@ const mapStateToProps = createStructuredSelector({
 });
 
 function mapDispatchToProps(dispatch) {
-  return { dispatch };
+  return {
+    dispatch,
+    focusOnAction: (id) => dispatch(focusOnAction(id)),
+    addDependency: (fromId, toId) => dispatch(rest.actions.actions.addDependency(fromId, toId)),
+    removeDependency: (fromId, toId) => dispatch(rest.actions.actions.removeDependency(toId, fromId)),
+  };
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
