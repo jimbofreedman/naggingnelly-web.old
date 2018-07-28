@@ -95,7 +95,7 @@ const GraphNode = DropTarget('ACTION', squareTarget, collectDrop)(DragSource('AC
         dy="0.31em"
         x={d.x < Math.PI ? 6 : -6}
         textAnchor={d.x < Math.PI ? 'start' : 'end'}
-        transform={`'rotate(${(d.x < Math.PI ? d.x - (Math.PI / 2) : d.x + (Math.PI / 2)) * (180 / Math.PI)})`}
+        transform={`rotate(${(d.x < Math.PI ? d.x - (Math.PI / 2) : d.x + (Math.PI / 2)) * (180 / Math.PI)})`}
 
       >
         {action.shortDescription}
