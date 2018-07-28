@@ -23,7 +23,8 @@ import { DragDropContext } from 'react-dnd';
 import MouseBackend from 'react-dnd-mouse-backend';
 import { DragSource, DropTarget } from 'react-dnd';
 import rest from '../../rest';
-import { Glyphicon } from 'react-bootstrap';
+import { Glyphicon, Button } from 'react-bootstrap';
+import {focusOnAction} from './actions';
 
 const knightSource = {
   beginDrag(props) {
@@ -84,14 +85,15 @@ const DeleteLink = DropTarget("LINK", binTarget, collectDrop)(({connectDropTarge
   return connectDropTarget(<circle r="20" style={ { fill: isOver ? '#990000' : '#000000' } } />);
 });
 
-const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("ACTION", knightSource, collectDrag)(({d, action, connectDragSource, isDragging, connectDropTarget, isOver}) => {
+const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("ACTION", knightSource, collectDrag)(({d, action, onClick, connectDragSource, isDragging, connectDropTarget, isOver}) => {
   return connectDropTarget(connectDragSource(
     <g
       transform={'translate(' + radialPoint(d.x, d.y) + ')'}
       style={ { fill: (isDragging ? '#cc00cc' : (isOver ? '#00cccc' : undefined)) } }
+      onClick={onClick}
     >
       <circle
-        r="2.5"
+        r="4"
         style={ { fill: (d.children ? '#555555' : '#999999') } }
       />
       <text
@@ -130,15 +132,14 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   constructor(props) {
     super(props)
     this.state = {
-      selectedType: null,
-      selectedItem: null
+      selectedAction: null
     }
   }
 
   render() {
     const width = 1600;
     const height = 1600;
-    const { actions } = this.props;
+    const { actions, selectedActionId } = this.props;
 
     //   g = svg.append('g").attr("transform", );
 
@@ -165,22 +166,32 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       });
     });
 
+    const filter = (id) => {
+      const action = actions.data[id];
+      return action.status === 0;
+    }
+
     const getDependencies = (path) => (id) => {
-      if (actions.data[id].status != 0) { return []; }
+      if (!filter(id)) {
+        return [];
+      }
       return [{ path: `${path}.${id}` }].concat(!depOns[id] ? [] : depOns[id].map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
     };
 
-    var mapped = [{
-      path: 'start',
-      shortDescription: 'WIN',
-    }].concat(Object.keys(actions.data)
+    const initial = selectedActionId ? { ...actions.data[selectedActionId], path: `${selectedActionId}` } : { path: 'start', shortDescription: 'WIN', };
+    const other = selectedActionId ? (!depOns[selectedActionId] ? [] : depOns[selectedActionId]) : Object.keys(actions.data).filter((id) => actions.data[id].dependencies.length === 0);
+
+    console.log(other);
+
+    var mapped = [initial].concat(other
       .filter((id) => {
         const action = actions.data[id];
-        return action.status === 0 && action.dependencies.length === 0 && action.folder != 1; // todo other people's folders
+        return action.status === 0 && action.folder != 1; // todo other people's folders
       })
       .map((id) => {
-      return getDependencies('start')(id);
-    }).reduce((acc, val) => acc.concat(val), []));
+        return getDependencies(initial.path)(id);
+      })
+      .reduce((acc, val) => acc.concat(val), []));
 
     var root = tree(stratify(mapped));
 
@@ -188,7 +199,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       const id = d.id.substring(d.id.lastIndexOf('.') + 1);
       const action = id === 'start' ? { shortDescription: 'WIN' } : actions.data[id];
       return [
-        <GraphNode key={d.id} d={d} action={action} dispatch={this.props.dispatch} />
+        <GraphNode key={d.id} d={d} action={action} dispatch={this.props.dispatch} onClick={() => this.setState({selectedAction: action})} />
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
@@ -199,8 +210,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       :
       (
         <div>
-          <div>Selected Type: { this.state.selectedType }</div>
-          <div>Selected Item: { this.state.selectedItem }</div>
+          <div>Selected Action: { this.state.selectedAction ? this.state.selectedAction.shortDescription : 'None' }</div>
+          <Button disabled={!this.state.selectedAction} onClick={() => this.props.dispatch(focusOnAction(this.state.selectedAction.id))}>Focus</Button>
 
           <svg
             width="100%"
@@ -225,6 +236,7 @@ ActionGraph.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   actions: makeSelectActions(),
+  selectedActionId: (state) => state.get('selectedActionId')
 });
 
 function mapDispatchToProps(dispatch) {

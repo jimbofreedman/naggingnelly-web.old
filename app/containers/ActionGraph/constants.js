@@ -4,4 +4,4 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/ActionGraph/DEFAULT_ACTION';
+export const FOCUS_ON_ACTION = 'app/ActionGraph/FOCUS_ON_ACTION';

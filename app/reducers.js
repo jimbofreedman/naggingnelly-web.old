@@ -40,6 +40,17 @@ function routeReducer(state = routeInitialState, action) {
   }
 }
 
+
+function selectedActionIdReducer(state = fromJS(0), action) {
+  switch (action.type) {
+    /* istanbul ignore next */
+    case 'app/ActionGraph/FOCUS_ON_ACTION':
+      return action.actionId;
+    default:
+      return state;
+  }
+}
+
 /**
  * Creates the main reducer with the dynamically injected ones
  */
@@ -49,6 +60,7 @@ export default function createReducer(injectedReducers) {
     global: globalReducer,
     language: languageProviderReducer,
     form: formReducer,
+    selectedActionId: selectedActionIdReducer,
     ...rest.reducers,
     ...injectedReducers,
   });

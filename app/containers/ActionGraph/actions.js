@@ -5,11 +5,12 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  FOCUS_ON_ACTION,
 } from './constants';
 
-export function defaultAction() {
+export function focusOnAction(actionId) {
   return {
-    type: DEFAULT_ACTION,
+    type: FOCUS_ON_ACTION,
+    actionId,
   };
 }
