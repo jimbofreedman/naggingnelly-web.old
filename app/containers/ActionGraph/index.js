@@ -17,7 +17,7 @@ import injectReducer from 'utils/injectReducer';
 import * as d3 from 'd3';
 import MouseBackend from 'react-dnd-mouse-backend';
 import { DragSource, DropTarget, DragDropContext } from 'react-dnd';
-import { Button } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 
 import { makeSelectActions } from '../App/selectors';
 import rest from '../../rest';
@@ -124,6 +124,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     super(props);
     this.state = {
       selectedAction: null,
+      totalRadius: 800,
     };
   }
 
@@ -131,6 +132,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     const width = 1600;
     const height = 1600;
     const { actions, selectedActionId } = this.props;
+    const { selectedAction, totalRadius } = this.state;
 
     //   g = svg.append('g").attr("transform", );
 
@@ -143,7 +145,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       .parentId((d) => d.path.substring(0, d.path.lastIndexOf('.')));
 
     const tree = d3.tree()
-      .size([2 * Math.PI, 1000])
+      .size([2 * Math.PI, this.state.totalRadius])
       .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
 
     const depOns = {};
@@ -203,8 +205,11 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       :
       (
         <div>
-          <div>Selected Action: { this.state.selectedAction ? this.state.selectedAction.shortDescription : 'None' }</div>
-          <Button disabled={!this.state.selectedAction} onClick={() => this.props.dispatch(focusOnAction(this.state.selectedAction.id))}>Focus</Button>
+          <div>Selected Action: { selectedAction ? selectedAction.shortDescription : 'None' }</div>
+          <Button disabled={!selectedAction} onClick={() => this.props.dispatch(focusOnAction(selectedAction.id))}>Focus</Button>
+          <Button disabled={!selectedActionId} onClick={() => this.props.dispatch(focusOnAction(0))}>Clear Focus</Button>
+          <Button onClick={() => this.setState({ totalRadius: totalRadius + 100 })}><Glyphicon glyph="plus" /></Button>
+          <Button onClick={() => this.setState({ totalRadius: totalRadius - 100 })}><Glyphicon glyph="minus" /></Button>
 
           <svg
             width="100%"
