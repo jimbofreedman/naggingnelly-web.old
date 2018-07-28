@@ -166,6 +166,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     });
 
     const getDependencies = (path) => (id) => {
+      if (actions.data[id].status != 0) { return []; }
       return [{ path: `${path}.${id}` }].concat(!depOns[id] ? [] : depOns[id].map((depId) => getDependencies(`${path}.${id}`)(depId)).reduce((acc, val) => acc.concat(val), []));
     };
 
