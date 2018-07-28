@@ -14,17 +14,18 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectActions } from '../App/selectors';
-import reducer from './reducer';
-import saga from './saga';
 import * as d3 from "d3";
-import { css } from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import MouseBackend from 'react-dnd-mouse-backend';
 import { DragSource, DropTarget } from 'react-dnd';
+import { Button } from 'react-bootstrap';
+
+import { makeSelectActions } from '../App/selectors';
 import rest from '../../rest';
-import { Glyphicon, Button } from 'react-bootstrap';
-import {focusOnAction} from './actions';
+import { focusOnAction } from './actions';
+import reducer from './reducer';
+import saga from './saga';
+
 
 const knightSource = {
   beginDrag(props) {
@@ -36,7 +37,7 @@ const linkSource = {
   beginDrag(props) {
     console.log(props);
     console.log([props.l.source.id, props.l.target.id]);
-    return {sourceNodeId: props.l.source.id, targetNodeId: props.l.target.id};
+    return { sourceNodeId: props.l.source.id, targetNodeId: props.l.target.id };
   }
 };
 
@@ -52,8 +53,6 @@ const squareTarget = {
 
 const binTarget = {
   drop(props, monitor) {
-    console.log("DROP");
-    console.log(monitor.getItem());
     const getActionIdFromNodeId = (nodeId) => { return nodeId.substring(nodeId.lastIndexOf('.') + 1); };
     const fromId = getActionIdFromNodeId(monitor.getItem().sourceNodeId);
     const toId = getActionIdFromNodeId(monitor.getItem().targetNodeId);
@@ -61,24 +60,23 @@ const binTarget = {
   }
 };
 
-function collectDrag(connect, monitor) {
+const collectDrag = (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   }
-}
+};
 
-function collectDrop(connect, monitor) {
+const collectDrop = (connect, monitor) => {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
   }
-}
+};
 
-function radialPoint(x, y) {
+const radialPoint = (x, y) => {
   return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
-}
-
+};
 
 const DeleteLink = DropTarget("LINK", binTarget, collectDrop)(({connectDropTarget, isOver}) => {
   // Must wrap in div to satisfy DropTarget
