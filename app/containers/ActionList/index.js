@@ -36,7 +36,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
           <div>
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Field name="folder" defaultValue={3} component={SelectFolder} data={folders.data} />
+                <Field name="folder" defaultValue={3} component={SelectFolder} data={folders.toJS().data} />
                 <Field name="showFuture" component={ToggleButton} label="Show Future" />
               </FormGroup>
             </Form>

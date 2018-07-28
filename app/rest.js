@@ -30,15 +30,7 @@ export function dictionaryTransformer(data, prevData /* , action */) {
 
   const newData = {};
   if (data === undefined || data === []) {
-    return prevData;
-  }
-
-  if (prevData !== undefined) {
-    Object.keys(prevData).forEach((id) => {
-      if (Object.prototype.hasOwnProperty.call(prevData, id)) {
-        newData[id] = prevData[id];
-      }
-    });
+    return {};
   }
 
   if (data !== undefined) {

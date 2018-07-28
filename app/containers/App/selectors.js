@@ -42,12 +42,12 @@ const makeSelectActions = () => createSelector(
 
 const makeSelectContexts = () => createSelector(
   selectState,
-  (state) => state.get('contexts').toJS()
+  (state) => state.get('contexts')
 );
 
 const makeSelectFolders = () => createSelector(
   selectState,
-  (state) => state.get('folders').toJS()
+  (state) => state.get('folders')
 );
 
 export {
