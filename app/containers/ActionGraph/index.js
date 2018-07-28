@@ -181,8 +181,6 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     const initial = selectedActionId ? { ...actions.data[selectedActionId], path: `${selectedActionId}` } : { path: 'start', shortDescription: 'WIN', };
     const other = selectedActionId ? (!depOns[selectedActionId] ? [] : depOns[selectedActionId]) : Object.keys(actions.data).filter((id) => actions.data[id].dependencies.length === 0);
 
-    console.log(other);
-
     var mapped = [initial].concat(other
       .filter((id) => {
         const action = actions.data[id];

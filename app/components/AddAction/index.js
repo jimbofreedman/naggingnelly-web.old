@@ -12,11 +12,12 @@ import { Form, FormGroup, InputGroup, Glyphicon, SplitButton, MenuItem } from 'r
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import rest from '../../rest';
 
-function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
+function AddAction({ dispatch, data, pristine, submitting, valid, reset, parentActionId }) {
+  console.log(parentActionId);
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(rest.actions.actions.post({},
-      { body: JSON.stringify({ ...data, ...{ folder: 3, context: 3 } }) },
+      { body: JSON.stringify({ ...data, ...{ folder: 3, context: 3, dependencies: parentActionId ? [parentActionId] : [] } }) },
       (err) => {
         if (err === null) {
           reset();
@@ -48,6 +49,7 @@ function AddAction({ dispatch, data, pristine, submitting, valid, reset }) {
 
 AddAction.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  parentActionId: PropTypes.number,
   data: PropTypes.object,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
@@ -63,6 +65,7 @@ const mapStateToProps = (state) => {
     data: {
       shortDescription: selector(state, 'shortDescription'),
     },
+    parentActionId: state.get('selectedActionId'),
   };
 };
 
