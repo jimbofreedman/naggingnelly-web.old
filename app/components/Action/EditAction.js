@@ -8,10 +8,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-import { Panel, Grid, Row, Col, FormGroup, InputGroup, Button, MenuItem, Glyphicon } from 'react-bootstrap';
+import { FormGroup, InputGroup, Button } from 'react-bootstrap';
 import { Form, Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
-import ActionHeader from './ActionHeader';
 import rest from '../../rest';
 
 
@@ -21,10 +20,9 @@ export class EditAction extends React.PureComponent {
   }
 
   render() {
-    const { dispatch, action, folders, contexts, data } = this.props;
+    const { dispatch, action, /* folders, contexts, */ data } = this.props;
 
-    const disabled = false;
-    const color = undefined;
+    // const disabled = false;
 
     const handleUpdate = () => {
       dispatch(rest.actions.actions.put(
@@ -32,16 +30,20 @@ export class EditAction extends React.PureComponent {
         { body: JSON.stringify({ ...action, ...data }) }));
     };
 
-    const valid = true;
-    const pristine = true;
-    const submitting = true;
+    // const valid = true;
+    // const pristine = true;
+    // const submitting = true;
 
     return (
       <Form onSubmit={handleUpdate} key={`editAction${action.id}`}>
         <FormGroup>
           <InputGroup>
-            <Field name="shortDescription" component="input" className="form-control" type="text"
-                   placeholder="Add to collectbox..."/>
+            <Field
+              name="shortDescription"
+              component="input"
+              className="form-control"
+              type="text"
+            />
           </InputGroup>
         </FormGroup>
         <Button onClick={handleUpdate} bsStyle="primary">Save</Button>
@@ -52,13 +54,12 @@ export class EditAction extends React.PureComponent {
 
 EditAction.propTypes = {
   action: PropTypes.object,
-  folders: PropTypes.object,
-  contexts: PropTypes.object,
+  // folders: PropTypes.object,
+  // contexts: PropTypes.object,
   dispatch: PropTypes.func,
+  initialize: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
-
-
-const formName = 'editAction';
 
 const mapStateToProps = (state, props) => {
   const selector = formValueSelector(props.form);
@@ -76,9 +77,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-  form:"irrelevant",
-  fields: ["shortDescription"],
-  enableReinitialize: true
+  form: 'irrelevant',
+  fields: ['shortDescription'],
+  enableReinitialize: true,
 })(EditAction));
-
-

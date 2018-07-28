@@ -13,7 +13,6 @@ import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import rest from '../../rest';
 
 function AddAction({ dispatch, data, pristine, submitting, valid, reset, parentActionId }) {
-  console.log(parentActionId);
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(rest.actions.actions.post({},

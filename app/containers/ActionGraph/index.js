@@ -251,3 +251,19 @@ export default compose(
   withSaga,
   withConnect,
 )(DragDropContext(MouseBackend)(ActionGraph));
+
+
+  /*
+  none
+  home
+  work
+  computer
+  programming
+  shopping
+  purchases
+  calls
+  reading
+  study
+  errand
+  barradrill
+   */

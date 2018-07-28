@@ -121,14 +121,14 @@ export default reduxApi({
       },
       addDependency(id, otherId) {
         return [
-          { id, fn: 'add_dependency', "dependency_action_id": otherId },
-          { method: 'post' }
+          { id, fn: 'add_dependency', dependency_action_id: otherId },
+          { method: 'post' },
         ];
       },
       removeDependency(id, otherId) {
         return [
-          { id, fn: 'remove_dependency', "dependency_action_id": otherId },
-          { method: 'post' }
+          { id, fn: 'remove_dependency', dependency_action_id: otherId },
+          { method: 'post' },
         ];
       },
       syncSince(updatedSince) {
