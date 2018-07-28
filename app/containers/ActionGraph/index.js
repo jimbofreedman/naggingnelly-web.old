@@ -23,10 +23,19 @@ import { DragDropContext } from 'react-dnd';
 import MouseBackend from 'react-dnd-mouse-backend';
 import { DragSource, DropTarget } from 'react-dnd';
 import rest from '../../rest';
+import { Glyphicon } from 'react-bootstrap';
 
 const knightSource = {
   beginDrag(props) {
     return props.action;
+  }
+};
+
+const linkSource = {
+  beginDrag(props) {
+    console.log(props);
+    console.log([props.l.source.id, props.l.target.id]);
+    return {sourceNodeId: props.l.source.id, targetNodeId: props.l.target.id};
   }
 };
 
@@ -37,6 +46,17 @@ const squareTarget = {
     if (fromId != toId) {
       props.dispatch(rest.actions.actions.addDependency(fromId, toId));
     }
+  }
+};
+
+const binTarget = {
+  drop(props, monitor) {
+    console.log("DROP");
+    console.log(monitor.getItem());
+    const getActionIdFromNodeId = (nodeId) => { return nodeId.substring(nodeId.lastIndexOf('.') + 1); };
+    const fromId = getActionIdFromNodeId(monitor.getItem().sourceNodeId);
+    const toId = getActionIdFromNodeId(monitor.getItem().targetNodeId);
+    props.dispatch(rest.actions.actions.removeDependency(toId, fromId));
   }
 };
 
@@ -58,11 +78,17 @@ function radialPoint(x, y) {
   return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
 }
 
+
+const DeleteLink = DropTarget("LINK", binTarget, collectDrop)(({connectDropTarget, isOver}) => {
+  // Must wrap in div to satisfy DropTarget
+  return connectDropTarget(<circle r="20" style={ { fill: isOver ? '#990000' : '#000000' } } />);
+});
+
 const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("ACTION", knightSource, collectDrag)(({d, action, connectDragSource, isDragging, connectDropTarget, isOver}) => {
   return connectDropTarget(connectDragSource(
     <g
       transform={'translate(' + radialPoint(d.x, d.y) + ')'}
-      style={ { fill: (isDragging ? '#cccc00' : (isOver ? '#00cccc' : undefined)) } }
+      style={ { fill: (isDragging ? '#cc00cc' : (isOver ? '#00cccc' : undefined)) } }
     >
       <circle
         r="2.5"
@@ -82,12 +108,12 @@ const GraphNode = DropTarget("ACTION", squareTarget, collectDrop)(DragSource("AC
 }));
 
 
-const GraphLink = DragSource("LINK", knightSource, collectDrag)(({l, connectDragSource, isDragging}) => {
+const GraphLink = DragSource("LINK", linkSource, collectDrag)(({l, connectDragSource, isDragging}) => {
   return connectDragSource(
     <path
       style={ {
         fill: 'none',
-        stroke: '#555',
+        stroke: isDragging ? '#c0c' : '#bbb',
         strokeOpacity: 0.4,
         strokeWidth: '3px',
       } }
@@ -110,8 +136,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   }
 
   render() {
-    const width = 2000;
-    const height = 2000;
+    const width = 1600;
+    const height = 1600;
     const { actions } = this.props;
 
     //   g = svg.append('g").attr("transform", );
@@ -165,7 +191,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
       ].concat(d.children ? d.children.map(renderNode) : []);
     };
 
-    const renderLinks = (d) => d.links().map((l) => <GraphLink key={`${l.source.id}-${l.target.id}`}l={l}/>);
+    const renderLinks = (d) => d.links().map((l) => <GraphLink key={`${l.source.id}-${l.target.id}`} l={l} />);
 
     return (!actions.sync) ?
       (<div>Loading</div>)
@@ -174,12 +200,14 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
         <div>
           <div>Selected Type: { this.state.selectedType }</div>
           <div>Selected Item: { this.state.selectedItem }</div>
+
           <svg
             width="100%"
-            height={2000}
+            height={1600}
             viewBox={`0 0 ${width} ${height}`}
             style={{borderWidth:"2px", borderColor: "black", borderStyle: "solid"}}
           >
+            <DeleteLink dispatch={this.props.dispatch} />
             <g transform={'translate(' + ((width / 2) + 40) + ',' + ((height / 2) + 90) + ')'}>
               {renderLinks(root)};
               {renderNode(root)};

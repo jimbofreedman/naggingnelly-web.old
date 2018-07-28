@@ -125,6 +125,12 @@ export default reduxApi({
           { method: 'post' }
         ];
       },
+      removeDependency(id, otherId) {
+        return [
+          { id, fn: 'remove_dependency', "dependency_action_id": otherId },
+          { method: 'post' }
+        ];
+      },
       syncSince(updatedSince) {
         return [{ updatedSince }];
       },
