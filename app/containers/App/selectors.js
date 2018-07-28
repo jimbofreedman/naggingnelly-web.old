@@ -37,7 +37,7 @@ const makeSelectLocation = () => createSelector(
 
 const makeSelectActions = () => createSelector(
   selectState,
-  (state) => state.get('actions').toJS()
+  (state) => state.get('actions')
 );
 
 const makeSelectContexts = () => createSelector(

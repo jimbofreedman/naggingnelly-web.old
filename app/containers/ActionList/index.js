@@ -25,38 +25,13 @@ import ToggleButton from './ToggleButton';
 import config from '../../config';
 
 export class ActionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  constructor(props) {
-    super(props);
-    this.refresh = this.refresh.bind(this);
-  }
-
-  componentDidMount() {
-    if (config.autoRefresh) {
-      this.interval = setInterval(this.refresh, 10000);
-    }
-    this.refresh();
-  }
-
-  componentWillUnmount() {
-    if (config.autoRefresh) {
-      clearInterval(this.interval);
-    }
-  }
-
-  refresh() {
-    this.props.poll();
-  }
-
   render() {
     console.log("rendering ACTIONLIST");
 
     const handleSubmit = () => {};
     const { actions, folders, contexts, dispatch, filters } = this.props;
 
-    return (!actions.sync || !folders.sync || !contexts.sync) ?
-      (<div>Loading</div>)
-      :
-      (
+    return (
         <div>
           <div>
             <Form onSubmit={handleSubmit}>
@@ -68,17 +43,21 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
           </div>
           <PanelGroup id="actionList" accordion>
             {
-              Object.keys(actions.data)
+              Array.from(actions.entries())
                 .sort((a, b) =>
-                  actions.data[b].priority - actions.data[a].priority
+                  {
+                    return b[1].get('priority') - a[1].get('priority');
+                  }
                 )
-                .map((id) => {
-                  const action = actions.data[id];
-                  return action.status === 0 &&
-                    (filters.showFuture || (!action.startAt || new Date(action.startAt) <= new Date())) &&
-                    (action.folder === filters.folder) &&
-                    (!action.dependsOn || !action.dependsOn.length || !action.dependsOn.filter((a) => actions.data[a].status === 0).length) ? (
-                      <Action key={action.id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
+                .map((tup) => {
+                  const id = tup[0];
+                  const action = tup[1];
+                  return action.get('status') === 0 &&
+                    (filters.showFuture || (!action.get('startAt') || new Date(action.get('startAt')) <= new Date())) &&
+                    (action.get('folder') === filters.folder) &&
+                    (!action.get('dependsOn') || !action.get('dependsOn').length || !action.get('dependsOn').filter((a) => actions.get(a).get('status') === 0).length)
+                    ? (
+                      <Action key={id} action={action} folders={folders} contexts={contexts} dispatch={dispatch} />
                   ) : null;
                 })
             }
@@ -102,9 +81,6 @@ const formName = 'actionList';
 
 const mapStateToProps = createStructuredSelector({
   ActionList: makeSelectActionList(),
-  actions: makeSelectActions(),
-  contexts: makeSelectContexts(),
-  folders: makeSelectFolders(),
   filters: (state) => {
     const selector = formValueSelector(formName);
     return {

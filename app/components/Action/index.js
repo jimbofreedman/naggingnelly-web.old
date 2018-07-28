@@ -13,7 +13,8 @@ import EditAction from './EditAction';
 import ActionHeader from './ActionHeader';
 
 function Action(props) {
-  const { dispatch, action, folders, contexts } = props;
+  const { dispatch, folders, contexts } = props;
+  const action = props.action.toJS();
 
   const disabled = false;
 

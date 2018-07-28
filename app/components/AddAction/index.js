@@ -64,7 +64,7 @@ const mapStateToProps = (state) => {
     data: {
       shortDescription: selector(state, 'shortDescription'),
     },
-    parentActionId: state.get('selectedActionId'),
+    parentActionId: state.getIn(['selectedActionId', 'id']),
   };
 };
 

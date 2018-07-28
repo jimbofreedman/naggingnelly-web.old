@@ -25,6 +25,9 @@ export function fetchWithCsrfToken(url, request) {
 }
 
 export function dictionaryTransformer(data, prevData /* , action */) {
+  console.log(data);
+  console.log(prevData);
+
   const newData = {};
   if (data === undefined || data === []) {
     return prevData;

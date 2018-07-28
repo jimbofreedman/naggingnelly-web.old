@@ -42,6 +42,7 @@ function routeReducer(state = routeInitialState, action) {
 
 
 function selectedActionIdReducer(state = fromJS({ id: 0 }), action) {
+  console.log(action.type);
   switch (action.type) {
     /* istanbul ignore next */
     case 'app/ActionGraph/FOCUS_ON_ACTION':

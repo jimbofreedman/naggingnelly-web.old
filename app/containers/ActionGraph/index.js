@@ -131,7 +131,8 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   render() {
     const width = 1600;
     const height = 1600;
-    const { actions, selectedActionId, focus } = this.props;
+    const { selectedActionId, focus } = this.props;
+    const actions = this.props.actions.toJS();
     const { selectedAction, totalRadius } = this.state;
 
     console.log("rendering ACTIONGRAPH");
