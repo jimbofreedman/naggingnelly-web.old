@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-import { ButtonGroup, DropdownButton, Glyphicon, MenuItem, Panel } from 'react-bootstrap';
+import { ButtonGroup, DropdownButton, Glyphicon, MenuItem, Panel, SplitButton } from 'react-bootstrap';
 import { ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
 
 import rest from '../../rest';
@@ -34,6 +34,9 @@ function ActionHeader(props) {
   });
 
   const menuItems = [
+    <MenuItem key="cancel" onClick={handleUpdate({ status: 2 })}><Glyphicon glyph="minus" />&nbsp;Cancel</MenuItem>,
+    <MenuItem key="fail" onClick={handleUpdate({ status: 1 })}><Glyphicon glyph="remove" />&nbsp;Fail</MenuItem>,
+    <MenuItem key="dfinish" divider />,
     <MenuItem key={0} data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
       API Edit
     </MenuItem>,
@@ -56,33 +59,24 @@ function ActionHeader(props) {
 
   return (
     <Panel.Heading>
-      <ContextMenuTrigger id={`contextMenu${action.id}`}>
-        <div className="pull-right">
-          {dueLabel}
-          <ButtonGroup style={{ marginTop: '-5px' }}>
-            <DropdownButton id={`dropdownMenu${action.id}`} bsSize="small" noCaret title={<Glyphicon glyph="menu-hamburger" />} disabled={loading} >
-              {menuItems}
-            </DropdownButton>
-            <ActionButton glyph="remove" disabled={loading} bsStyle="danger" onClick={handleHelper(rest.actions.actions.fail)} />
-            <ActionButton glyph="minus" disabled={loading} bsStyle="warning" onClick={handleHelper(rest.actions.actions.cancel)} />
-            <ActionButton glyph="ok" disabled={loading} bsStyle="success" onClick={handleHelper(rest.actions.actions.complete)} />
-          </ButtonGroup>
-        </div>
-        <div
-          style={{
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <Glyphicon glyph={contexts.data[action.context].glyph} />
-          <Panel.Toggle componentClass="span">{action.shortDescription}</Panel.Toggle>
-        </div>
-      </ContextMenuTrigger>
-
-      <ContextMenu id={`contextMenu${action.id}`}>
-        {menuItems}
-      </ContextMenu>
+      <div className="pull-right">
+        {dueLabel}
+        <ButtonGroup style={{ marginTop: '-5px' }}>
+          <SplitButton id={`dropdownMenu${action.id}`} bsSize="small" bsStyle="success" title={<Glyphicon glyph="ok"/>} disabled={loading}>
+            {menuItems}
+          </SplitButton>
+        </ButtonGroup>
+      </div>
+      <div
+        style={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <Glyphicon glyph={contexts.data[action.context].glyph} />
+        <Panel.Toggle componentClass="span">{action.shortDescription}</Panel.Toggle>
+      </div>
     </Panel.Heading>);
 }
 
