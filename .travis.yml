@@ -14,9 +14,6 @@ node_js:
 script:
 - npm run build
 
-before_deploy:
-- ls -R
-
 deploy:
   provider: s3
   bucket: "naggingnelly-web"
