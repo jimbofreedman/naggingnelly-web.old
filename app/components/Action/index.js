@@ -40,7 +40,7 @@ export class Action extends React.PureComponent {
                 <Col>{action.dueAt}</Col>
               </Row> : null}
           </Grid>
-          <EditAction action={action} form={`editAction${action.id}`} />
+          {/*<EditAction action={action} form={`editAction${action.id}`} />*/}
         </Panel.Body>
       </Panel>
     );
