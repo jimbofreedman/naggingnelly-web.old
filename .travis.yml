@@ -13,6 +13,8 @@ node_js:
 
 script:
 - npm run build
+
+before_deploy:
 - ls -R
 
 deploy:
