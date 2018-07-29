@@ -62,7 +62,7 @@ function ActionHeader(props) {
       <div className="pull-right">
         {dueLabel}
         <ButtonGroup style={{ marginTop: '-5px' }}>
-          <SplitButton id={`dropdownMenu${action.id}`} bsSize="small" bsStyle="success" title={<Glyphicon glyph="ok"/>} disabled={loading}>
+          <SplitButton id={`dropdownMenu${action.id}`} bsSize="small" bsStyle="success" onClick={handleUpdate({ status: 3 })} title={<Glyphicon glyph="ok"/>} disabled={loading}>
             {menuItems}
           </SplitButton>
         </ButtonGroup>
