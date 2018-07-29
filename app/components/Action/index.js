@@ -22,8 +22,6 @@ export class Action extends React.PureComponent {
 
     const disabled = false;
 
-    console.log(`rendering ACTION`);
-
     return (
       <Panel key={action.id} eventKey={action.id} disabled={disabled}>
         <ActionHeader dispatch={dispatch} action={action} folders={folders} contexts={contexts}/>

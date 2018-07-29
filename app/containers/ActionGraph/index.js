@@ -135,10 +135,6 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
     const actions = this.props.actions.toJS();
     const { selectedAction, totalRadius } = this.state;
 
-    console.log("rendering ACTIONGRAPH");
-
-    //   g = svg.append('g").attr("transform", );
-
     if (!actions.sync) {
       return <div>Loading...</div>;
     }

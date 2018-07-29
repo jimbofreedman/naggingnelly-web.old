@@ -26,8 +26,6 @@ import config from '../../config';
 
 export class ActionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    console.log("rendering ACTIONLIST");
-
     const handleSubmit = () => {};
     const { actions, folders, contexts, dispatch, filters } = this.props;
 

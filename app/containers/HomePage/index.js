@@ -46,7 +46,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   render() {
     const { actions, folders, contexts, selectedActionId } = this.props;
-    console.log("rendering HOME");
 
     const loading = !actions.get('sync') || !folders.get('sync') || !contexts.get('sync');
 

@@ -18,8 +18,6 @@ import config from '../../config';
 
 
 function ActionHeader(props) {
-  // console.log("RENDERING ACTIONHEADER");
-
   const { dispatch, action, folders, contexts } = props;
   const loading = false;
 
