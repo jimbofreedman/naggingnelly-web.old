@@ -1,21 +1,28 @@
 language: node_js
-
 node_js:
-  - 6
+- 6
+#script:
+#- node ./internals/scripts/generate-templates-for-linting
+#- npm run test
+#- npm run build
+#before_install:
+#- export CHROME_BIN=chromium-browser
+#- export DISPLAY=:99.0
+#- sh -e /etc/init.d/xvfb start
+#after_success: npm run coveralls
 
-script:
-  - node ./internals/scripts/generate-templates-for-linting
-  - npm run test
-  - npm run build
+seciprt:
+- npm run build
 
-before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-
-after_success: 'npm run coveralls'
+deploy:
+  provider: s3
+  local_dir: build
+  access_key_id:
+    secure: fD6SM30bljs4yoni3BFI+3hDodzEERKsVuGHPNcmf6Dr+FIVA0n6qahnQHcKt62CS3M785TnwPht32FowSgsAs5bcJAwg7Sg2YOLDAT7IG56p1rO4nGphbJ2GEEhZ00JK4MMNOH7/zyOdvbAWMwxqpeO9pos0IYDQfIje8cO7LuTsLTjmf1be6t3uhA+Rkm4YXNiR3dfaB/sI0osxIRx86JOQwQyyCMQBRAIs2iYnlY5tMRkEZPxmH7yPu3Uj7pZg8gxO2zYMlU8Y4QzwIrj0A225mDTf5svxyWC9fIjD1896aIO49dfzWqendTYLCZvKmKdxrhm7i7DgiBhOWlqGvwxBphO5Sr6oAr2MNaAk1xULnRYPvdCH13UGhw6YMBVk2yP4mnp0bUTzfWYxuQrHJiDCt4NChilxvWVjM77oNoPyxU2MipNgGYO7r6DCJtkTBHMKwAjB7/2fiDjhKOulK15MjlJavC4kCI1/pr33BDKNu6Y5UH9rfBF5kqGtxYcmVt/s6rn7nuNWH4AObwSk99Cvib17+42VB3rU6rH33XY0KkkOiJ5Jy9CVMeYx7uhrcrxPJIcwiHiDgCjbCTfHKboblnKFEJY/zYCvrsHuyMDQMy5Qc6aqSU1r+6R7qnhywkQRnu2MR889SvDhqGAGkqpcUt5OmUuHVgpLGjfBGU=
+  secret_access_key:
+    secure: mwnlOfOYQ7pTbIpJPne5Jo4wceyc8eijc1kM8+kfiVR3dkgxaOIYSXpzDeITta4nRTB/WT2jhKf+h+M+WgA4v6sSLmIJDTUpNg/QvAUtLecF3ajoz2ingQRBfGbBZ7TDE56hFkdJSRKieROEAnrT0zE3+/btioxNWwFkganSTJ1jkO1sKnIx8CDBLvjqE9qU5O1ayrdzeaoZcKet7psraQDtFdIcQFZzmLtd7qfk21MI7icvmXPwlPfhKgTvDeXHERWH23dctCS0gDYvP3NswC367CiyLySpCPvuexUR1dcKtgi8jNpt3dwgEV2JaP2ZKSX/AkSBnewoKOAnnatreA9UNo4JQmRMWDs7r0TA+zEKNJM1890BlAlC85y3qV+gnzMB9vQV6oMozqjE6fG0V2pvN2yHpgIGcZe8AiO01OlTiud/usVIl7BZkla3fnc3vDCfnHmGcw2lEsRiN/Ka29UEwO2zreFu5KNZTXDK81lYA7nyEtGyNoCZTnbqo8gJ0JC6FCMVQGxcO9APvrUtT/EfwRE3rAtfelZaDiOpGy+CAv/0pBsCYr3sOmGF2IojgrTZ8eHWrXhzHFo41dOHgqIwWQQ8I6Vhb63UOxsP/5K9YWK5kCFqBBE6kEzIM36+oEpTLsNT4y/z8C2Nhn+Fvxopkeb3p70FN4jI+loHr2Y=
 
 cache:
   yarn: true
   directories:
-    - node_modules
+  - node_modules
