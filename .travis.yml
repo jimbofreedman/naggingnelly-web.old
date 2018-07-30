@@ -5,7 +5,7 @@ script:
 - npm run build
 deploy:
   provider: s3
-  bucket: naggingnelly-web
+  bucket: www.naggingnelly.com
   skip_cleanup: true
   access_key_id:
     secure: R1NyUI+ughTYn1hHaRcM6sG63j8drGgC8HK6S2WXVsLl7e+xDB+bNbkILBNTwvPgA027NW4HmL6pfpUo3h2q9/pG2uuolGa+0ODYZSkh3bLi+wT04Z0sic8oOWMQE/UjKCmXxiyy9Rw6jhY6Rz3wwEYvvY0aLqWSwOzQjF3mm/nvzdLeQS+yLFkuKCUO1JH18bb3Txm1nFzK0WQT2MZug7C2NWvFkn//JT3mdPhSZOIPYlJ9RqIpR19vXMwFYgHvtjdeTxpimTy6udpuTL70J+bbpVVfZYOUEFrCHZgdO2jfkATIZLXBsuzSMfFNiO32pNxqKDlEIDS2zOLkcoHhrO8WP0LLOA1El/jGb+An/VBHHihlhZ4KccgP9pLetLrAxJgeL2Zv14F3/OLQ6YyaKfLAo6xbRWSwBG9oZmw9FGepr5otzQpHGLplvM/xfX1FzokcF+wfRJo+MInLdkj2sCY6aZ7emtZGnB3nRCFMPociK/qrm5hHtZ7iJE1hoendmf+i4sAqW9Xljv26VfeXvluTKuEx52cUa+AsrI6vx+1xdFgHM6M4eWYE7pPWCpyHC/c9lbKlyoSoC3qVJG/MKnGwZovvKn/52AKR+f/jVXVT2w0Nyrca09MrSt91Ypqe7+f91qethSgpOzMJQKTjfWGM5epVXe5sQ/1Xo7jVM0A=
