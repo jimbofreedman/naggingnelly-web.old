@@ -24,7 +24,7 @@ export function fetchWithCsrfToken(url, request) {
   return fetch(stripDoubleSlashes(url), newRequest);
 }
 
-export function dictionaryTransformer(data, prevData /* , action */) {
+export function dictionaryTransformer(data, prevData /*, action */) {
   const newData = {};
   if (data === undefined || data === []) {
     return {};
@@ -40,7 +40,7 @@ export function dictionaryTransformer(data, prevData /* , action */) {
     }
   }
 
-  return newData;
+  return { ...prevData, ...newData };
 }
 
 export function syncSinceCallback(dispatch, type) {
