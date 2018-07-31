@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { fromJS } from 'immutable';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -131,7 +132,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
   render() {
     const width = 1600;
     const height = 1600;
-    const { selectedActionId, focus } = this.props;
+    const { selectedActionId, focus, filterFunc } = this.props;
     const actions = this.props.actions.toJS();
     const { selectedAction, totalRadius } = this.state;
 
@@ -160,7 +161,7 @@ class ActionGraph extends React.PureComponent { // eslint-disable-line react/pre
 
     const filter = (id) => {
       const action = actions.data[id];
-      return action.status === 0;
+      return action.status === 0 && filterFunc(fromJS(action));
     };
 
     const getDependencies = (path) => (id) => {
@@ -231,6 +232,7 @@ ActionGraph.propTypes = {
   dispatch: PropTypes.func.isRequired,
   actions: PropTypes.object.isRequired,
   selectedActionId: PropTypes.number,
+  filterFunc: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({});
