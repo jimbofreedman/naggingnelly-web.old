@@ -258,17 +258,10 @@ export default compose(
 )(DragDropContext(MouseBackend)(ActionGraph));
 
 
-  /*
-  none
-  home
-  work
-  computer
-  programming
-  shopping
-  purchases
-  calls
-  reading
-  study
-  errand
-  barradrill
-   */
+
+
+
+
+
+
+

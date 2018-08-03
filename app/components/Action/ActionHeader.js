@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 // import styled from 'styled-components';
 import { ButtonGroup, DropdownButton, Glyphicon, MenuItem, Panel, SplitButton } from 'react-bootstrap';
 import { ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
@@ -41,12 +42,20 @@ export class ActionHeader extends React.PureComponent {
       this.setState({ loading: true, finished: actionDelta.status > 0 });
     });
 
+    const oneWeekSnooze = () => handleUpdate({
+      startAt: action.startAt ? moment(action.startAt).add(1, 'weeks') : undefined,
+      dueAt: action.dueAt ? moment(action.startAt).add(1, 'weeks') : undefined,
+    });
+
     const menuItems = [
       <MenuItem key="cancel" disabled={loading} onClick={handleUpdate({ status: 2 })}><Glyphicon glyph="minus"/>&nbsp;Cancel</MenuItem>,
       <MenuItem key="fail" disabled={loading} onClick={handleUpdate({ status: 1 })}><Glyphicon glyph="remove"/>&nbsp;Fail</MenuItem>,
       <MenuItem key="dfinish" divider/>,
-      <MenuItem key={0} data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
+      <MenuItem key="apiedit" data={'some_data'} href={`${config.api.endpoint}admin/gtd/action/${action.id}/change`}>
         API Edit
+      </MenuItem>,
+      <MenuItem key="1weeksnooze" disabled={loading} onClick={oneWeekSnooze()}>
+        1wk snooze
       </MenuItem>,
       <MenuItem key="dfolder" disabled={loading} divider/>,
       <MenuItem key="hfolder" disabled={loading} header>Move to folder</MenuItem>,
