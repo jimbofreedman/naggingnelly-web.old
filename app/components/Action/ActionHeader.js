@@ -27,6 +27,10 @@ export class ActionHeader extends React.PureComponent {
     };
   }
 
+  getDerivedStateFromProps(props, state) {
+    return { finished: props.action.status > 0 };
+  }
+
   render() {
     const { dispatch, action, folders, contexts } = this.props;
     const { loading, finished } = this.state;
@@ -37,8 +41,15 @@ export class ActionHeader extends React.PureComponent {
 
     const handleUpdate = (actionDelta) => (() => {
       dispatch(rest.actions.actions.put(
-        { id: action.id },
-        { body: JSON.stringify({ ...action, ...actionDelta }) }));
+          { id: action.id },
+          { body: JSON.stringify({ ...action, ...actionDelta }) },
+          (err) => {
+            if (err) {
+              console.log("ERROR", err);
+            }
+            this.setState({ loading: false })}
+        )
+      );
       this.setState({ loading: true, finished: actionDelta.status > 0 });
     });
 
