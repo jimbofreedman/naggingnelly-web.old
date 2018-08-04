@@ -68,10 +68,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         </Form>
         <Grid fluid>
           <Row>
-            <Col sm={12} md={12} lg={4}>
+            <Col sm={12} md={12} lg={3}>
               <ActionList actions={actions.get('data')} contexts={contexts} folders={folders} filters={filters} filterFunc={filterFunc} />
             </Col>
-            <Col xsHidden mdHidden lg={8}>
+            <Col xsHidden mdHidden lg={9}>
               <ActionGraph actions={actions} selectedActionId={selectedActionId} filters={filters} filterFunc={filterFunc} />
             </Col>
           </Row>
