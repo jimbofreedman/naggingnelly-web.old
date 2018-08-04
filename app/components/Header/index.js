@@ -9,14 +9,6 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
   render() {
     return (
       <div>
-        <NavBar>
-          <HeaderLink to="/">
-            <FormattedMessage {...messages.home} />
-          </HeaderLink>
-          <HeaderLink to="/actionGraph">
-            <FormattedMessage {...messages.actionGraph} />
-          </HeaderLink>
-        </NavBar>
       </div>
     );
   }
